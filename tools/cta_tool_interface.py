@@ -1,3 +1,5 @@
+'''Implementation of abstract class for an interface to a CTA tool.'''
+
 from anndata import AnnData
 import pandas as pd
 
