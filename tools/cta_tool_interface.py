@@ -17,7 +17,6 @@ class CTAToolInterface(ABC):
         Returns:
             results of annotation using the tool in question
         '''
-        pass
 
     @abstractmethod
     def convert(res, convert_to: str):
@@ -30,4 +29,3 @@ class CTAToolInterface(ABC):
         Returns: 
             data structure containing data in proper format
         '''
-        pass
