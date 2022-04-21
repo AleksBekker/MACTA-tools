@@ -3,8 +3,8 @@
 from anndata import AnnData
 import pandas as pd
 
-from tools.cta_tool_interface import CTAToolInterface
-from tools.celltypist_interface import CelltypistInterface
+from .tools.cta_tool_interface import CTAToolInterface
+from .tools.celltypist_interface import CelltypistInterface
 
 
 def annotate(
