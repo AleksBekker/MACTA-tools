@@ -9,12 +9,14 @@ from abc import ABC, abstractmethod
 class CTAToolInterface(ABC):
     """Abstract class for tool interfaces"""
 
+    # region Abstract methods
+
     @abstractmethod
     def annotate(self, expr_data: AnnData, ref_data, **kwargs):
         """Runs annotation using tool.
 
         Arguments:
-            expr_data (AnnData): experimental data being analyzed
+            expr_data (AnnData): expression data being analyzed
             ref_data (AnnData): reference/marker data used to analyze
 
         Returns:
@@ -33,11 +35,39 @@ class CTAToolInterface(ABC):
             `pandas.Series` object containing data in the `convert_to` format
         """
 
-    def run_full(self, expr_data: AnnData, ref_data, convert_to: str, **kwargs):
-        """Run `self.annotate`, followed by `self.convert` on a data set
+    # endregion
+
+    # region Pre-processing methods
+
+    def preprocess_expr(self, expr_data: AnnData):
+        """Pre-process expr_data for use in a specific algorithm.
 
         Arguments:
-            expr_data (AnnData): experimental data being analyzed
+            expr_data (AnnData): expression data being analyzed
+
+        Returns:
+            Expression data in a format that `annotate` will accept
+        """
+        return expr_data
+
+    def preprocess_ref(self, ref_data):
+        """Pre-process expr_data for use in a specific algorithm.
+
+        Arguments:
+            ref_data (AnnData): reference/marker data used to analyze
+
+        Returns:
+            Reference/marker data in a format that `annotate` will accept
+        """
+        return ref_data
+
+    # endregion
+
+    def run_full(self, expr_data: AnnData, ref_data, convert_to: str, **kwargs):
+        """Run `self.annotate`, followed by `self.convert` on a data set.
+
+        Arguments:
+            expr_data (AnnData): expression data being analyzed
             ref_data (AnnData): reference/marker data used to analyze
             convert_to (str): format to which `res` will be converted
 
