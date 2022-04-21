@@ -20,7 +20,6 @@ def annotate(
         },
         'marker': {},
     },
-    *args,
     **kwargs
 ):
     """Runs MACTA.
