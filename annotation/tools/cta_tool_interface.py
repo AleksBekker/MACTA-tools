@@ -10,7 +10,7 @@ class CTAToolInterface(ABC):
     '''Abstract class for tool interfaces'''
 
     @abstractmethod
-    def annotate(self, expr_data: AnnData, ref_data: AnnData, **kwargs):
+    def annotate(self, expr_data: AnnData, ref_data, **kwargs):
         '''Runs annotation using tool.
 
         Arguments:
@@ -33,7 +33,7 @@ class CTAToolInterface(ABC):
             `pandas.Series` object containing data in the `convert_to` format
         '''
 
-    def run_full(self, expr_data: AnnData, ref_data: AnnData, convert_to: str, **kwargs):
+    def run_full(self, expr_data: AnnData, ref_data, convert_to: str, **kwargs):
         '''Run `self.annotate`, followed by `self.convert` on a data set
 
         Arguments:
