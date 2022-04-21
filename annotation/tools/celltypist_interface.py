@@ -18,7 +18,7 @@ logging.getLogger(celltypist.__name__).setLevel(logging.ERROR)
 class CelltypistInterface(CTAToolInterface):
     '''Class for interfacing with the `celltypist` tool'''
 
-    def annotate(self, expr_data: AnnData, ref_data: AnnData, labels_col, **kwargs):
+    def annotate(self, expr_data: AnnData, ref_data: AnnData, **kwargs):
         '''Runs annotation using `celltypist`.
 
         Arguments:
@@ -30,7 +30,7 @@ class CelltypistInterface(CTAToolInterface):
             results of annotation using `celltypist`
         '''
 
-        model = celltypist.train(ref_data, labels=labels_col)
+        model = celltypist.train(ref_data, labels=kwargs['labels'])
         predictions = celltypist.annotate(expr_data,
                                           model=model,
                                           majority_voting=True)
