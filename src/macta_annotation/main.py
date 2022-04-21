@@ -43,7 +43,8 @@ def _parse_annotation_args() -> argparse.Namespace:
     # parser.add_argument(
     #     '-s', '--stdout',
     #     action='store_true',
-    #     help='when this argument is included, the results will be outputted to stdout, disregarding the --output option'
+    #     help='when this argument is included, the results will be outputted to stdout, disregarding the --output' +
+    #          'option'
     # )
 
     # endregion
@@ -54,7 +55,8 @@ def _parse_annotation_args() -> argparse.Namespace:
 
     # Experimental data argument
     required_named.add_argument(
-        '-e', '--expr_path',
+        '-e',
+        '--expr_path',
         type=str,
         help='path to experiment data in h5 seurat file',
         required=True,
@@ -62,15 +64,17 @@ def _parse_annotation_args() -> argparse.Namespace:
 
     # Reference data argument
     required_named.add_argument(
-        '-r', '--ref_path',
+        '-r',
+        '--ref_path',
         type=str,
-        help='path to reference/marker data in h5 seurat file',
+        help='path to reference/marker data in h5 anndata file',
         required=True,
     )
 
     # Test type argument
     required_named.add_argument(
-        '-t', '--type',
+        '-t',
+        '--type',
         type=str,
         choices=['marker', 'ref'],
         help='type of test to perform',
@@ -87,14 +91,16 @@ def _parse_annotation_args() -> argparse.Namespace:
     )
 
     required_named.add_argument(
-        '-l', '--labels_col',
+        '-l',
+        '--labels_col',
         type=str,
         help='string name of column in `ref_data`',
         required=True,
     )
     # Output folder argument
     required_named.add_argument(
-        '-o', '--output',
+        '-o',
+        '--output',
         type=str,
         help='path to output file',
         required=True,
@@ -112,6 +118,7 @@ def main() -> None:
     raw_args = _parse_annotation_args()
 
     import scanpy as sc
+
     expr_data = sc.read(raw_args.expr_path)
     ref_data = sc.read(raw_args.ref_path)
     labels_col = raw_args.labels_col
@@ -131,14 +138,21 @@ def main() -> None:
         'type',
     }
 
-    annotation_kwargs = {k: v for k, v in vars(raw_args).items()
-                         if k not in unnecessary_kwargs}
+    annotation_kwargs = {
+        k: v for k, v in vars(raw_args).items() if k not in unnecessary_kwargs
+    }
 
-    from annotate import annotate
-    annotation_results = annotate(expr_data, ref_data, labels_col,
-                                  annot_type, annot_tools=annot_tools,
-                                  result_type=result_type,
-                                  **annotation_kwargs)
+    from annotation.annotate import annotate
+
+    annotation_results = annotate(
+        expr_data,
+        ref_data,
+        labels_col,
+        annot_type,
+        annot_tools=annot_tools,
+        result_type=result_type,
+        **annotation_kwargs
+    )
 
     annotation_results.to_csv(raw_args.output)
 

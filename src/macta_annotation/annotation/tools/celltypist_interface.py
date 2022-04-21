@@ -1,11 +1,10 @@
-'''Wrapper code for `celltypist`.'''
+"""Wrapper code for `celltypist`."""
 
 import celltypist
 
 from anndata import AnnData
 from celltypist import AnnotationResult
 import pandas as pd
-import scanpy as sc
 
 from .cta_tool_interface import CTAToolInterface
 
@@ -16,10 +15,12 @@ logging.getLogger(celltypist.__name__).setLevel(logging.ERROR)
 
 
 class CelltypistInterface(CTAToolInterface):
-    '''Class for interfacing with the `celltypist` tool'''
+    """Class for interfacing with the `celltypist` tool"""
 
-    def annotate(self, expr_data: AnnData, ref_data: AnnData, **kwargs) -> AnnotationResult:
-        '''Runs annotation using `celltypist`.
+    def annotate(
+        self, expr_data: AnnData, ref_data: AnnData, **kwargs
+    ) -> AnnotationResult:
+        """Runs annotation using `celltypist`.
 
         Arguments:
             expr_data (AnnData): experimental data being analyzed
@@ -27,25 +28,25 @@ class CelltypistInterface(CTAToolInterface):
             labels_col: column of `ref_data` that contains annotation labels
 
         Returns:
-            results of annotation using `celltypist`
-        '''
+            `AnnotationResult` object containing the results of annotation using `celltypist`
+        """
 
         model = celltypist.train(ref_data, labels=kwargs['labels'])
-        predictions = celltypist.annotate(expr_data,
-                                          model=model,
-                                          majority_voting=True)
+        predictions = celltypist.annotate(expr_data, model=model, majority_voting=True)
         return predictions
 
-    def convert(self, results: AnnotationResult, convert_to: str, **kwargs) -> pd.Series:
-        '''Converts `celltypist` results to standardized format.
+    def convert(
+        self, results: AnnotationResult, convert_to: str, **kwargs
+    ) -> pd.Series:
+        """Converts `celltypist` results to standardized format.
 
         Arguments:
             results (AnnotationResult): celltypist results
             convert_to (str): format to which `res` will be converted
 
-        Returns: 
+        Returns:
             `pandas.Series` object containing data in the `convert_to` format
-        '''
+        """
 
         if convert_to == 'labels':
             return results.predicted_labels.majority_voting
