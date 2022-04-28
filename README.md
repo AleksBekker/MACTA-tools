@@ -5,7 +5,7 @@ The goal of this code is to assemble multiple python-based cell type annotation 
 ## Auto-Annotation Tools Currently Implemented:
 - `celltypist`
 
-# Installation for Development
+## Installation for Development
 
 ```bash
 git clone https://github.com/AleksBekker/MACTA_py
