@@ -10,7 +10,7 @@ from .cta_tool_interface import CTAToolInterface
 
 import logging
 
-# Disable `celltypist`'s drivial output logs
+# Disable `celltypist`'s trivial output logs
 logging.getLogger(celltypist.__name__).setLevel(logging.ERROR)
 
 
@@ -25,13 +25,12 @@ class CelltypistInterface(CTAToolInterface):
         Arguments:
             expr_data (AnnData): experimental data being analyzed
             ref_data (AnnData): reference/marker data used to analyze (NOT the model)
-            labels_col: column of `ref_data` that contains annotation labels
 
         Returns:
             `AnnotationResult` object containing the results of annotation using `celltypist`
         """
 
-        model = celltypist.train(ref_data, labels=kwargs['labels'])
+        model = celltypist.train(ref_data, labels=kwargs['labels'], check_expression=False)
         predictions = celltypist.annotate(expr_data, model=model, majority_voting=True)
         return predictions
 
