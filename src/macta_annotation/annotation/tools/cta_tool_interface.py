@@ -39,7 +39,7 @@ class CTAToolInterface(ABC):
 
     # region Pre-processing methods
 
-    def preprocess_expr(self, expr_data: AnnData):
+    def preprocess_expr(self, expr_data: AnnData, **kwargs):
         """Pre-process expr_data for use in a specific algorithm.
 
         Arguments:
@@ -50,7 +50,7 @@ class CTAToolInterface(ABC):
         """
         return expr_data
 
-    def preprocess_ref(self, ref_data):
+    def preprocess_ref(self, ref_data, **kwargs):
         """Pre-process expr_data for use in a specific algorithm.
 
         Arguments:
@@ -63,17 +63,22 @@ class CTAToolInterface(ABC):
 
     # endregion
 
-    def run_full(self, expr_data: AnnData, ref_data, convert_to: str, **kwargs):
+    def run_full(
+        self, expr_data: AnnData, ref_data, convert_to: str, **kwargs
+    ) -> pd.Series:
         """Run `self.annotate`, followed by `self.convert` on a data set.
 
         Arguments:
             expr_data (AnnData): expression data being analyzed
-            ref_data (AnnData): reference/marker data used to analyze
+            ref_data: reference/marker data used to analyze
             convert_to (str): format to which `res` will be converted
 
         Returns:
-            results of annotation, in the `convert_to` format
+            `pandas.Series` object containing the results of annotation, in the `convert_to` format
         """
 
-        results = self.annotate(expr_data, ref_data, **kwargs)
+        expr_data_prepped = self.preprocess_expr(expr_data, **kwargs)
+        ref_data_prepped = self.preprocess_ref(ref_data, **kwargs)
+
+        results = self.annotate(expr_data_prepped, ref_data_prepped, **kwargs)
         return self.convert(results, convert_to, **kwargs)
