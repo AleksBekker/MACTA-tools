@@ -2,5 +2,6 @@
 requires = ["setuptools>=42.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.black]
-skip-string-normalization = true
+[tool.autopep8]
+max_line_length = 120
+ignore = "E203" # https://github.com/PyCQA/pycodestyle/issues/373
