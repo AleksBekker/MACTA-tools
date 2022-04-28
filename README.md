@@ -9,8 +9,7 @@ The goal of this code is to assemble multiple python-based cell type annotation 
 
 ```bash
 git clone https://github.com/AleksBekker/MACTA_py
-conda create -n macta_py python=3.7
-conda install --file requirements.txt -c bioconda -c conda-forge
-conda install --file requirements_dev.txt -c conda-forge
+cd MACTA_py
+# conda create -n macta_py python=3.7
 pip install -e .
 ```
