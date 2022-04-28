@@ -19,6 +19,11 @@ class cellassign_interface(CTAToolInterface):
             results of annotation using the tool in question
         """
 
+        args = {'size_factor_key': 'size_factor', **kwargs}
+
+        CellAssign.setup_anndata(expr_data, size_factor_key=args['size_factor_key'])
+        return CellAssign(expr_data, ref_data).train().predict()
+
     def convert(self, results, convert_to: str, **kwargs) -> pd.Series:
         """Converts `cellassign` results to standardized format.
 
