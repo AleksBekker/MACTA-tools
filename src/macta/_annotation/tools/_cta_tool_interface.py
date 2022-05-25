@@ -19,6 +19,7 @@ class CTAToolInterface(ABC):
     def requirements(self) -> rqs.RequirementList:
         if self.__requirements is None:
             raise TypeError("Abstract field `self.__requirements` has not been set during class creation")
+        return self.__requirements
 
     # endregion
 
