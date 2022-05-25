@@ -20,11 +20,11 @@ class CelltypistInterface(CTAToolInterface):
 
     # TODO: do this through `super.requirements` property,
     # possibly using self.__post_init__()
-    _requirements = rqs.RequirementList(
-        annot_type=rqs.StrictRequirement('ref'),
-    )
+    _requirements = rqs.RequirementList(annot_type=rqs.StrictRequirement("ref"),)
 
-    def annotate(self, expr_data: AnnData, ref_data: AnnData, **kwargs) -> AnnotationResult:
+    def annotate(
+        self, expr_data: AnnData, ref_data: AnnData, **kwargs
+    ) -> AnnotationResult:
         """Runs annotation using `celltypist`.
 
         Arguments:
@@ -32,14 +32,19 @@ class CelltypistInterface(CTAToolInterface):
             ref_data (AnnData): reference/marker data used to analyze (NOT the model)
 
         Returns:
-            `AnnotationResult` object containing the results of annotation using `celltypist`
+            `AnnotationResult` object containing the results of annotation using
+            celltypist
         """
 
-        model = celltypist.train(ref_data, labels=kwargs['labels'], check_expression=False)
+        model = celltypist.train(
+            ref_data, labels=kwargs["labels"], check_expression=False
+        )
         predictions = celltypist.annotate(expr_data, model=model, majority_voting=True)
         return predictions
 
-    def convert(self, results: AnnotationResult, convert_to: str, **kwargs) -> pd.Series:
+    def convert(
+        self, results: AnnotationResult, convert_to: str, **kwargs
+    ) -> pd.Series:
         """Converts `celltypist` results to standardized format.
 
         Arguments:
@@ -50,7 +55,7 @@ class CelltypistInterface(CTAToolInterface):
             `pandas.Series` object containing data in the `convert_to` format
         """
 
-        if convert_to == 'labels':
+        if convert_to == "labels":
             return results.predicted_labels.majority_voting
 
-        raise ValueError('Invalid option for `covert_to`')
+        raise ValueError("Invalid option for `covert_to`")

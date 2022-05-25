@@ -1,4 +1,4 @@
-"""Implementation of an enum for how to deal with a directory once it's no longer in use."""
+"""Implementation of an enum for directory close behavior."""
 
 import enum
 

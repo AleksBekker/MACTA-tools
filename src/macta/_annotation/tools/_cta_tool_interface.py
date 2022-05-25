@@ -18,7 +18,9 @@ class CTAToolInterface(ABC):
     @property
     def requirements(self) -> rqs.RequirementList:
         if self._requirements is None:
-            raise TypeError("Abstract field `self.__requirements` has not been set during class creation")
+            raise TypeError(
+                "Abstract field `__requirements` has not been set during class creation"
+            )
         return self._requirements
 
     # endregion
@@ -79,7 +81,9 @@ class CTAToolInterface(ABC):
 
     # region Other class methods for annotation
 
-    def run_full(self, expr_data: AnnData, ref_data, convert_to: str, **kwargs) -> pd.Series:
+    def run_full(
+        self, expr_data: AnnData, ref_data, convert_to: str, **kwargs
+    ) -> pd.Series:
         """Run `self.annotate`, followed by `self.convert` on a data set.
 
         Arguments:
@@ -88,7 +92,8 @@ class CTAToolInterface(ABC):
             convert_to (str): format to which `res` will be converted
 
         Returns:
-            `pandas.Series` object containing the results of annotation, in the `convert_to` format
+            `pandas.Series` object containing the results of annotation, in the
+            `convert_to` format
         """
 
         expr_data_prepped = self.preprocess_expr(expr_data, **kwargs)
@@ -102,13 +107,16 @@ class CTAToolInterface(ABC):
     # region Class methods for requirement validation
 
     def is_compatible_with(self, **kwargs) -> bool:
-        """Check if a set of other values is compatible with this annotation tool interface
+        """Check if a set of other values is compatible with this annotation tool
+           interface
 
         Arguments:
-            other_values (Dict[str, any]): A dictionary of `requirement_name` -> `other_value`
+            other_values (Dict[str, any]): A dictionary of `requirement_name` ->
+            `other_value`
 
         Returns:
-            `True` if all of the `other_values` are compatible with this `RequirementList`'s requirements
+            `True` if all of the `other_values` are compatible with this
+            `RequirementList`'s requirements
         """
         return self.requirements.is_compatible_with(**kwargs)
 
