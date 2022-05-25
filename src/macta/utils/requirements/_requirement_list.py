@@ -30,9 +30,10 @@ class RequirementList:
         try:
             assert isinstance(new_requirements, dict)
             assert IsInstanceRequirement(str).are_compatible_with(*new_requirements.keys())
-            assert IsInstanceRequirement(str).are_compatible_with(*new_requirements.values())
+            assert IsInstanceRequirement(Requirement).are_compatible_with(*new_requirements.values())
         except AssertionError as e:
-            raise ValueError("self.requirements must be a Dictionary mapping `str` -> `Requirement`", e)
+            raise ValueError("`new_requirements` must be a Dictionary mapping `str` -> `Requirement`. " +
+                             f"Currently is {new_requirements}", e)
 
         self.__requirements = new_requirements
 
