@@ -1,13 +1,19 @@
 """Implementation of an interface for the `cellassign` tool."""
 
-from .cta_tool_interface import CTAToolInterface
 from anndata import AnnData
 import pandas as pd
-
 from scvi.external import CellAssign
 
+from .utils import CTAToolInterface
+from ...utils import requirements as rqs
 
-class cellassign_interface(CTAToolInterface):
+
+class CellassignInterface(CTAToolInterface):
+
+    __requirements = rqs.RequirementList(
+        annot_type='marker'
+    )
+
     def annotate(expr_data: AnnData, ref_data: pd.DataFrame, **kwargs):
         """Runs annotation using `cellassign`.
 

@@ -9,13 +9,13 @@ from ._is_instance_requirement import IsInstanceRequirement
 
 class RequirementList:
 
-    def __init__(self, requirements: Dict[str, Requirement]) -> None:
+    def __init__(self, requirements: Dict[str, Requirement] = {}, **kwargs) -> None:
         """Initializes a `RequirementList` object.
 
         Arguments:
             rqs (Dict[str, Requirement]): a dictionary detailing multiple requirements that this object should check for
         """
-        self.requirements = requirements
+        self.requirements = {**requirements, **kwargs}
 
     # region Class Properties
 
@@ -38,15 +38,15 @@ class RequirementList:
 
     # endregion
 
-    def is_compatible_with(self, other_values: Dict[str, any]) -> bool:
-        """Check if a set of other values is compatible with this RequirementList
+    def is_compatible_with(self, **kwargs) -> bool:
+        """Check if a set of other values is compatible with this `RequirementList`
 
         Arguments:
-            other_values (Dict[str, any]): A dictionary of `requirement_name` -> `other_value`
+            **kwargs: requirements to be tested
 
         Returns:
             `True` if all of the `other_values` are compatible with this `RequirementList`'s requirements
         """
 
         # TODO: find out if some kind of `zip` or related function is possible with dictionaries
-        return all(self.requirements[k].is_compatible(v) for k, v in other_values.items())
+        return all(self.requirements[k].is_compatible(v) for k, v in kwargs.items())

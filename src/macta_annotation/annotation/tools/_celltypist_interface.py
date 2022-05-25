@@ -6,7 +6,8 @@ from anndata import AnnData
 from celltypist import AnnotationResult
 import pandas as pd
 
-from .cta_tool_interface import CTAToolInterface
+from .utils import CTAToolInterface
+from ...utils import requirements as rqs
 
 import logging
 
@@ -16,6 +17,10 @@ logging.getLogger(celltypist.__name__).setLevel(logging.ERROR)
 
 class CelltypistInterface(CTAToolInterface):
     """Class for interfacing with the `celltypist` tool"""
+
+    __requirements = rqs.RequirementList(
+        annot_type=rqs.StrictRequirement('ref'),
+    )
 
     def annotate(self, expr_data: AnnData, ref_data: AnnData, **kwargs) -> AnnotationResult:
         """Runs annotation using `celltypist`.
@@ -45,5 +50,5 @@ class CelltypistInterface(CTAToolInterface):
 
         if convert_to == 'labels':
             return results.predicted_labels.majority_voting
-        else:
-            raise ValueError('Invalid option for `covert_to`')
+
+        raise ValueError('Invalid option for `covert_to`')
