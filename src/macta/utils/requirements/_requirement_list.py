@@ -11,7 +11,8 @@ class RequirementList:
         """Initializes a `RequirementList` object.
 
         Arguments:
-            rqs (Dict[str, Requirement]): a dictionary detailing multiple requirements that this object should check for
+            requirements (Dict[str, Requirement]): a dictionary detailing multiple requirements that this object should 
+            check for
         """
         if requirements is None:
             requirements = {}
