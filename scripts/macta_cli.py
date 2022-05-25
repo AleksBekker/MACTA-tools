@@ -1,7 +1,7 @@
 '''Run MACTA_py using CLI arguments'''
 
-from macta_annotation import annotate
-from macta_annotation.utils import DirectoryCloseMode, TemporaryFolder
+from macta import annotate
+from macta.utils import DirectoryCloseMode, TemporaryFolder
 
 import os
 
