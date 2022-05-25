@@ -1,6 +1,6 @@
 '''Implementation of a context manager for a temporary folder.'''
 
-from .directory_close_mode import DirectoryCloseMode
+from ._directory_close_mode import DirectoryCloseMode
 import os
 import shutil
 
