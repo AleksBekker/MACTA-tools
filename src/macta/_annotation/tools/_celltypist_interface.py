@@ -18,7 +18,9 @@ logging.getLogger(celltypist.__name__).setLevel(logging.ERROR)
 class CelltypistInterface(CTAToolInterface):
     """Class for interfacing with the `celltypist` tool"""
 
-    __requirements = rqs.RequirementList(
+    # TODO: do this through `super.requirements` property,
+    # possibly using self.__post_init__()
+    _requirements = rqs.RequirementList(
         annot_type=rqs.StrictRequirement('ref'),
     )
 

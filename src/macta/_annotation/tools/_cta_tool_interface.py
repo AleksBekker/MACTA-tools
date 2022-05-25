@@ -11,15 +11,15 @@ from ...utils import requirements as rqs
 class CTAToolInterface(ABC):
     """Abstract class for tool interfaces"""
 
-    __requirements: rqs.RequirementList = None
+    _requirements: rqs.RequirementList = None
 
     # region Class Property Methods
 
     @property
     def requirements(self) -> rqs.RequirementList:
-        if self.__requirements is None:
+        if self._requirements is None:
             raise TypeError("Abstract field `self.__requirements` has not been set during class creation")
-        return self.__requirements
+        return self._requirements
 
     # endregion
 
