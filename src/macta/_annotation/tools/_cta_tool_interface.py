@@ -5,7 +5,7 @@ from anndata import AnnData
 import pandas as pd
 
 
-from ....utils import requirements as rqs
+from ...utils import requirements as rqs
 
 
 class CTAToolInterface(ABC):

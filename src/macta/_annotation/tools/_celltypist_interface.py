@@ -6,7 +6,7 @@ from anndata import AnnData
 from celltypist import AnnotationResult
 import pandas as pd
 
-from .utils import CTAToolInterface
+from . import CTAToolInterface
 from ...utils import requirements as rqs
 
 import logging
