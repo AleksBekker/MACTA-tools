@@ -3,18 +3,19 @@ import logging
 from typing import Dict
 
 from ._requirement import Requirement
-from ._contains_requirement import ContainsRequirement
 from ._is_instance_requirement import IsInstanceRequirement
 
 
 class RequirementList:
 
-    def __init__(self, requirements: Dict[str, Requirement] = {}, **kwargs) -> None:
+    def __init__(self, requirements: Dict[str, Requirement] = None, **kwargs) -> None:
         """Initializes a `RequirementList` object.
 
         Arguments:
             rqs (Dict[str, Requirement]): a dictionary detailing multiple requirements that this object should check for
         """
+        if requirements is None:
+            requirements = {}
         self.requirements = {**requirements, **kwargs}
 
     # region Class Properties
