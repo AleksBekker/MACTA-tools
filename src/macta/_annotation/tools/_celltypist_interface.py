@@ -3,13 +3,14 @@
 import celltypist
 
 from anndata import AnnData
-from celltypist import AnnotationResult
+from celltypist import AnnotationResult, models
 import pandas as pd
 
 from . import CTAToolInterface
 from ...utils import requirements as rqs
 
 import logging
+from typing import Union
 
 # Disable `celltypist`'s trivial output logs
 logging.getLogger(celltypist.__name__).setLevel(logging.ERROR)
@@ -20,9 +21,9 @@ class CelltypistInterface(CTAToolInterface):
 
     # TODO: do this through `super.requirements` property,
     # possibly using self.__post_init__()
-    _requirements = rqs.RequirementList(annot_type=rqs.StrictRequirement('ref'),)
+    _requirements = rqs.RequirementList(annot_type=rqs.StrictRequirement('ref'))
 
-    def annotate(self, expr_data: AnnData, ref_data: AnnData, **kwargs) -> AnnotationResult:
+    def annotate(self, expr_data: AnnData, ref_data: Union[AnnData, str], **kwargs) -> AnnotationResult:
         """Runs annotation using `celltypist`.
 
         Arguments:
@@ -33,10 +34,7 @@ class CelltypistInterface(CTAToolInterface):
             `AnnotationResult` object containing the results of annotation using
             celltypist
         """
-
-        model = celltypist.train(ref_data, labels=kwargs['labels'], check_expression=False)
-        predictions = celltypist.annotate(expr_data, model=model, majority_voting=True)
-        return predictions
+        return celltypist.annotate(expr_data, model=ref_data, majority_voting=True)
 
     def convert(self, results: AnnotationResult, convert_to: str, **kwargs) -> pd.Series:
         """Converts `celltypist` results to standardized format.
@@ -52,4 +50,22 @@ class CelltypistInterface(CTAToolInterface):
         if convert_to == 'labels':
             return results.predicted_labels.majority_voting
 
-        raise ValueError('Invalid option for `covert_to`')
+        raise ValueError(f'{convert_to} is an invalid option for `convert_to`')
+
+    def preprocess_ref(self, ref_data: Union[AnnData, str], **kwargs) -> models.Model:
+
+        kwargs = {
+            'update_models': True,
+            'force_update': True,
+            **kwargs
+        }
+
+        if isinstance(ref_data, str):
+            if kwargs['update_models']:
+                models.download_models(force_update=kwargs['force_update'])
+            return models.Model.load(model=ref_data)
+
+        elif isinstance(ref_data, AnnData):
+            return celltypist.train(ref_data, labels=kwargs['labels'], check_expression=False)
+
+        raise ValueError(f'{type(ref_data)} is an unsupported data type for `ref_data`')
