@@ -8,17 +8,13 @@ import shutil
 class TemporaryFolder:
     """Context manager for a temporary folder."""
 
-    def __init__(
-        self,
-        path: str,
-        close_mode: DirectoryCloseMode = DirectoryCloseMode.DELETE_DIRECTORY,
-    ):
+    def __init__(self, path: str, close_mode: DirectoryCloseMode = DirectoryCloseMode.DELETE_DIRECTORY):
         """Initialize temp folder context manager.
 
         Arguments:
-            path (str): path to location of temporary folder
-            to_delete (DirectoryClosemode): determines the action performed to the 
-            directory once the context manager is closed
+            path (str): path to location of temporary folder to_delete (DirectoryClosemode): determines the action
+            performed to the directory once the context manager is closed
+            close_mode (DirectoryCloseMode): defines the behavior of the __exit__ function
         """
         self._path: str = path
         self._close_mode: DirectoryCloseMode = close_mode

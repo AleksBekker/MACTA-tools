@@ -13,8 +13,8 @@ def annotate(
     expr_data: AnnData,
     ref_data: Union[AnnData, pd.DataFrame],
     annot_type: str,
-    result_type: str = "labels",
-    annot_tools: Union[str, List[str]] = "*",
+    result_type: str = 'labels',
+    annot_tools: Union[str, List[str]] = '*',
     tool_interfaces: Dict[str, CTAToolInterface] = None,
     **kwargs
 ) -> pd.DataFrame:
@@ -33,18 +33,16 @@ def annotate(
     """
 
     if tool_interfaces is None:
-        tool_interfaces = {"celltypist": CelltypistInterface}
+        tool_interfaces = {'celltypist': CelltypistInterface}
 
-    if annot_tools == "*":
+    if annot_tools == '*':
         annot_tools = tool_interfaces.keys()
 
-    requirements = {"annot_type": annot_type}
+    requirements = {'annot_type': annot_type}
 
     return pd.DataFrame(
         {
-            tool_name: tool_interfaces[tool_name].run_full(
-                expr_data, ref_data, result_type, **kwargs
-            )
+            tool_name: tool_interfaces[tool_name].run_full(expr_data, ref_data, result_type, **kwargs)
             for tool_name, interface in tool_interfaces.items()
             if tool_name in annot_tools and interface.is_compatible_with(requirements)
         }

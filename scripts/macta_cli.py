@@ -1,4 +1,4 @@
-'''Run MACTA_py using CLI arguments'''
+"""Run MACTA_py using CLI arguments"""
 
 from macta import annotate
 from macta.utils import DirectoryCloseMode, TemporaryFolder
@@ -15,11 +15,11 @@ from typing import Union
 
 
 def _parse_annotation_args() -> argparse.Namespace:
-    '''Parse command-line arguments.
+    """Parse command-line arguments.
 
     Returns:
         argparse.Namespace: contains all parsed arguments and their values
-    '''
+    """
 
     # Set up parser
     parser = argparse.ArgumentParser()
@@ -117,14 +117,14 @@ def _parse_annotation_args() -> argparse.Namespace:
 
 
 def _load_ref_data(ref_path) -> Union[AnnData, pd.DataFrame]:
-    '''Load the reference data, given the reference path.
+    """Load the reference data, given the reference path.
 
     Arguments:
         ref_path (str): path to the reference data file
 
-    Returns: 
+    Returns:
         `AnnData` or `DataFrame` containing the proper reference data
-    '''
+    """
     file_suffix = os.path.splitext(ref_path)[1]
 
     if file_suffix.lower() == '.h5ad':
@@ -137,7 +137,7 @@ def _load_ref_data(ref_path) -> Union[AnnData, pd.DataFrame]:
 
 
 def main() -> None:
-    '''Run the annotation method from CLI.'''
+    """Run the annotation method from CLI."""
 
     raw_args = _parse_annotation_args()
 

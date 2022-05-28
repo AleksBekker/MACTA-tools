@@ -7,4 +7,4 @@ def is_collection(obj) -> bool:
     Returns:
         `True` if `obj` is a collection, `False` otherwise
     """
-    return "__contains__" in dir(obj) and not isinstance(obj, (bytearray, bytes, str))
+    return '__contains__' in dir(obj) and not isinstance(obj, (bytearray, bytes, str))

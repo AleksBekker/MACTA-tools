@@ -28,19 +28,10 @@ class RequirementList:
         # Input Validation
         try:
             assert isinstance(new_requirements, dict)
-            assert IsInstanceRequirement(str).are_compatible_with(
-                *new_requirements.keys()
-            )
-            assert IsInstanceRequirement(Requirement).are_compatible_with(
-                *new_requirements.values()
-            )
-        except AssertionError as e:
-            raise ValueError(
-                "`new_requirements` must be a Dictionary mapping "
-                + "`str` -> `Requirement`. "
-                + f"Currently is {new_requirements}",
-                e,
-            )
+            assert IsInstanceRequirement(str).are_compatible_with(*new_requirements.keys())
+            assert IsInstanceRequirement(Requirement).are_compatible_with(*new_requirements.values())
+        except AssertionError:
+            raise ValueError('`new_requirements` must be a dict mapping `str` -> `Requirement`')
 
         self.__requirements = new_requirements
 
