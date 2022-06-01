@@ -3,23 +3,34 @@
 from abc import ABC, abstractmethod
 from anndata import AnnData
 import pandas as pd
+from typing import Any, Dict, Optional
 
 
-from ...utils import requirements as rqs
+from ..utils import requirements as rqs
 
 
 class CTAToolInterface(ABC):
     """Abstract class for tool interfaces"""
 
-    _requirements: rqs.RequirementList = None
+    # TODO: possibly do this using abstract properties
+    __requirements: Optional[rqs.RequirementList] = None
 
     # region Class Property Methods
 
     @property
     def requirements(self) -> rqs.RequirementList:
-        if self._requirements is None:
+        if self.__requirements is None:
             raise TypeError('Abstract field `__requirements` has not been set during class creation')
-        return self._requirements
+        return self.__requirements
+
+    @requirements.setter
+    def requirements(self, value: Dict[str, rqs.Requirement]) -> None:
+        try:
+            assert isinstance(value, dict)
+            assert rqs.IsInstanceRequirement(str).are_compatible_with(*value.keys())
+            assert rqs.IsInstanceRequirement(rqs.Requirement).are_compatible_with(*value.values())
+        except AssertionError as e:
+            raise ValueError('`CTAToolInterface.requirements must be a dictionary of `str` -> `Requirement`') from e
 
     # endregion
 
@@ -102,7 +113,7 @@ class CTAToolInterface(ABC):
 
     # region Class methods for requirement validation
 
-    def is_compatible_with(self, **kwargs) -> bool:
+    def is_compatible_with(self, values: Optional[Dict[str, Any]] = None, **kwargs) -> bool:
         """Check if a set of other values is compatible with this annotation tool interface
 
         Arguments:
@@ -111,6 +122,9 @@ class CTAToolInterface(ABC):
         Returns:
             `True` if all of the `other_values` are compatible with this `RequirementList`'s requirements
         """
-        return self.requirements.is_compatible_with(**kwargs)
+        if values is None:
+            values = {}
+
+        return self.requirements.is_compatible_with(**{**values, **kwargs})
 
     # endregion

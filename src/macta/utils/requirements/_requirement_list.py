@@ -1,11 +1,12 @@
-from typing import Dict
+from typing import Dict, Optional
 
 from ._requirement import Requirement
 from ._is_instance_requirement import IsInstanceRequirement
 
 
+# TODO: make this inherit from `dict` and use its methods to store data
 class RequirementList:
-    def __init__(self, requirements: Dict[str, Requirement] = None, **kwargs) -> None:
+    def __init__(self, requirements: Optional[Dict[str, Requirement]] = None, **kwargs) -> None:
         """Initializes a `RequirementList` object.
 
         Arguments:
@@ -30,8 +31,8 @@ class RequirementList:
             assert isinstance(new_requirements, dict)
             assert IsInstanceRequirement(str).are_compatible_with(*new_requirements.keys())
             assert IsInstanceRequirement(Requirement).are_compatible_with(*new_requirements.values())
-        except AssertionError:
-            raise ValueError('`new_requirements` must be a dict mapping `str` -> `Requirement`')
+        except AssertionError as e:
+            raise ValueError('`new_requirements` must be a dict mapping `str` -> `Requirement`') from e
 
         self.__requirements = new_requirements
 
@@ -48,4 +49,4 @@ class RequirementList:
         """
 
         # TODO: find out if some kind of `zip` or related function is possible with dictionaries
-        return all(self.requirements[k].is_compatible(v) for k, v in kwargs.items())
+        return all(self.requirements[k].is_compatible_with(v) for k, v in kwargs.items())

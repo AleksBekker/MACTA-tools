@@ -4,26 +4,31 @@ import celltypist
 
 from anndata import AnnData
 from celltypist import AnnotationResult, models
+from dataclasses import dataclass
+import logging
 import pandas as pd
+from typing import Union
 
 from . import CTAToolInterface
-from ...utils import requirements as rqs
+from ..utils import requirements as rqs
 
-import logging
-from typing import Union
 
 # Disable `celltypist`'s trivial output logs
 logging.getLogger(celltypist.__name__).setLevel(logging.ERROR)
 
 
+@dataclass
 class CelltypistInterface(CTAToolInterface):
     """Class for interfacing with the `celltypist` tool"""
 
-    # TODO: do this through `super.requirements` property,
-    # possibly using self.__post_init__()
-    _requirements = rqs.RequirementList(annot_type=rqs.StrictRequirement('ref'))
+    # TODO: possibly do this using abstract properties
+    # Define requirements
+    def __post_init__(self):
+        self.requirements = rqs.RequirementList(
+            annot_type=rqs.StrictRequirement('ref'),
+        )
 
-    def annotate(self, expr_data: AnnData, ref_data: Union[AnnData, str], **kwargs) -> AnnotationResult:
+    def annotate(self, expr_data: AnnData, ref_data: models.Model, **kwargs) -> AnnotationResult:
         """Runs annotation using `celltypist`.
 
         Arguments:
@@ -31,8 +36,7 @@ class CelltypistInterface(CTAToolInterface):
             ref_data (AnnData): reference/marker data used to analyze (NOT the model)
 
         Returns:
-            `AnnotationResult` object containing the results of annotation using
-            celltypist
+            `AnnotationResult` object containing the results of annotation using celltypist
         """
         return celltypist.annotate(expr_data, model=ref_data, majority_voting=True)
 

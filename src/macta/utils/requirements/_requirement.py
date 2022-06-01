@@ -1,15 +1,27 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from typing import Any
 
 from .. import is_collection
 
 
-@dataclass
 class Requirement(ABC):
     """Class to represent a requirement"""
 
-    value: any
-    necessary: bool = False
+    def __init__(self, value: Any, necessary: bool = False):
+        self.__value = value
+        self.__necessary = necessary
+
+    # region Properties
+
+    @property
+    def value(self):
+        return self.__value
+
+    @property
+    def necessary(self):
+        return self.__necessary
+
+    # endregion
 
     @abstractmethod
     def is_compatible_with(self, other_value) -> bool:
