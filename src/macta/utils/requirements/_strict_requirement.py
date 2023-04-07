@@ -1,5 +1,5 @@
 from typing import cast
-from ._requirement import Requirement
+from macta.utils.requirements._requirement import Requirement
 
 
 class StrictRequirement(Requirement):

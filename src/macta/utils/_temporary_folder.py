@@ -1,6 +1,6 @@
 """Implementation of a context manager for a temporary folder."""
 
-from ._directory_close_mode import DirectoryCloseMode
+from macta.utils._directory_close_mode import DirectoryCloseMode
 import os
 import shutil
 

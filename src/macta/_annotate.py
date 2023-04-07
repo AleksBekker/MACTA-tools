@@ -5,7 +5,7 @@ import pandas as pd
 
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
-from .tools import CTAToolInterface, CelltypistInterface
+from macta.tools import CTAToolInterface, CelltypistInterface
 
 
 def annotate(

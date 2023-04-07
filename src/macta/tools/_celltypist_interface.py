@@ -1,16 +1,15 @@
 """Wrapper code for `celltypist`."""
 
-import celltypist
-
 from anndata import AnnData
+import celltypist
 from celltypist import AnnotationResult, models
 from dataclasses import dataclass
 import logging
 import pandas as pd
 from typing import Union
 
-from . import CTAToolInterface
-from ..utils import requirements as rqs
+from macta.tools import CTAToolInterface
+from macta.utils import requirements as rqs
 
 
 # Disable `celltypist`'s trivial output logs

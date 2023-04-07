@@ -5,8 +5,7 @@ from anndata import AnnData
 import pandas as pd
 from typing import Any, Dict, Optional
 
-
-from ..utils import requirements as rqs
+from macta.utils import requirements as rqs
 
 
 class CTAToolInterface(ABC):

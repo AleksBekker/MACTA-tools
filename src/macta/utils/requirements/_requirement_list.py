@@ -1,7 +1,7 @@
 from typing import Dict, Optional
 
-from ._requirement import Requirement
-from ._is_instance_requirement import IsInstanceRequirement
+from macta.utils.requirements._requirement import Requirement
+from macta.utils.requirements._is_instance_requirement import IsInstanceRequirement
 
 
 # TODO: make this inherit from `dict` and use its methods to store data

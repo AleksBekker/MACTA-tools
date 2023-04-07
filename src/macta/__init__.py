@@ -1,4 +1,4 @@
-from ._annotate import annotate
-from . import tools, utils
+from macta._annotate import annotate
+from macta import tools, utils
 
 __all__ = ['annotate', 'tools', 'utils']
