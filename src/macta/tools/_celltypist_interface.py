@@ -2,7 +2,8 @@
 
 from anndata import AnnData
 import celltypist
-from celltypist import AnnotationResult, models
+from celltypist import models
+from celltypist.classifier import AnnotationResult
 from dataclasses import dataclass
 import logging
 import pandas as pd
