@@ -9,6 +9,7 @@ __pycache__
 .coverage
 .tox
 
+build
 data
 results
 test_notebooks
