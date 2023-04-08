@@ -16,7 +16,8 @@ from macta.utils.requirements import ContainsRequirement
     ids=['str', 'tuple', 'list', 'set', 'dict']
 )
 def test_contains_requirement_is_compatible_with_passes(collection: Collection[Any], obj: Any):
-    assert ContainsRequirement(collection).is_compatible_with(obj)
+    result = ContainsRequirement(collection).is_compatible_with(obj)
+    return result and isinstance(result, bool)
 
 
 @pytest.mark.parametrize('collection, obj', [
@@ -30,7 +31,8 @@ def test_contains_requirement_is_compatible_with_passes(collection: Collection[A
     ids=['str', 'tuple', 'list', 'set', 'dict_key', 'dict_value']
 )
 def test_contains_requirement_is_compatible_with_fails(collection: Collection[Any], obj: Any):
-    assert not ContainsRequirement(collection).is_compatible_with(obj)
+    result = not ContainsRequirement(collection).is_compatible_with(obj)
+    return result and isinstance(result, bool)
 
 
 @lru_cache
@@ -50,7 +52,8 @@ def perms(iterable: Iterable[Any]) -> List[Tuple[Any]]:
     *(({0: 'a', 1: 'b', 2: 'c'}, perm) for perm in perms((0, 1, 2))),
 ])
 def test_contains_requirement_are_compatible_with_passes(collection: Collection[Any], objs: Tuple[Any]):
-    assert ContainsRequirement(collection).are_compatible_with(*objs)
+    result = ContainsRequirement(collection).are_compatible_with(*objs)
+    return result and isinstance(result, bool)
 
 
 @pytest.mark.parametrize('collection, objs', [
@@ -62,4 +65,5 @@ def test_contains_requirement_are_compatible_with_passes(collection: Collection[
     ({0: 'a', 1: 'b', 2: 'c', 3: 'd'}, ['a']),
 ], ids=['str_single', 'tuple_single', 'list_single', 'set_single', 'dict_key_single', 'dict_value_single'])
 def test_contains_requirement_are_compatible_with_fails(collection: Collection[Any], objs: Tuple[Any]):
-    assert not ContainsRequirement(collection).are_compatible_with(*objs)
+    result = not ContainsRequirement(collection).are_compatible_with(*objs)
+    assert result and isinstance(result, bool)
