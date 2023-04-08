@@ -17,7 +17,7 @@ from macta.utils.requirements import ContainsRequirement
 )
 def test_contains_requirement_is_compatible_with_passes(collection: Collection[Any], obj: Any):
     result = ContainsRequirement(collection).is_compatible_with(obj)
-    return result and isinstance(result, bool)
+    assert result and isinstance(result, bool)
 
 
 @pytest.mark.parametrize('collection, obj', [
@@ -32,7 +32,7 @@ def test_contains_requirement_is_compatible_with_passes(collection: Collection[A
 )
 def test_contains_requirement_is_compatible_with_fails(collection: Collection[Any], obj: Any):
     result = not ContainsRequirement(collection).is_compatible_with(obj)
-    return result and isinstance(result, bool)
+    assert result and isinstance(result, bool)
 
 
 @lru_cache
@@ -53,9 +53,10 @@ def perms(iterable: Iterable[Any]) -> List[Tuple[Any]]:
 ])
 def test_contains_requirement_are_compatible_with_passes(collection: Collection[Any], objs: Tuple[Any]):
     result = ContainsRequirement(collection).are_compatible_with(*objs)
-    return result and isinstance(result, bool)
+    assert result and isinstance(result, bool)
 
 
+# TODO separate different types of issues here #13
 @pytest.mark.parametrize('collection, objs', [
     ('abc', ['d']),
     ((0, 1, 2, 3), [4]),
@@ -63,7 +64,17 @@ def test_contains_requirement_are_compatible_with_passes(collection: Collection[
     ({0, 1, 2, 3}, [4]),
     ({0: 'a', 1: 'b', 2: 'c', 3: 'd'}, [4]),
     ({0: 'a', 1: 'b', 2: 'c', 3: 'd'}, ['a']),
-], ids=['str_single', 'tuple_single', 'list_single', 'set_single', 'dict_key_single', 'dict_value_single'])
+    ('abc', ['a', 'c', 'b', 'a', 'd']),
+    ('abc', ['d', 'a']),
+    ((0, 1, 2, 3), [3, 3, 3, 3, 3, 4]),
+    ((0, 1, 2, 3), [4, 1, 2, 3]),
+    ([0, 1, 2, 3], [1, 3, 4]),
+    ([0, 1, 2, 3], [4, 1, 1, 1]),
+    ({0, 1, 2, 3}, [1, 1, 4, 1]),
+    ({0, 1, 2, 3}, [4, 1, 2]),
+    ({0: 'a', 1: 'b', 2: 'c', 3: 'd'}, [*(2 for _ in range(1000)), 4, 3, 1]),
+    ({0: 'a', 1: 'b', 2: 'c', 3: 'd'}, [0, 1, 2, 'a', 'b']),
+])
 def test_contains_requirement_are_compatible_with_fails(collection: Collection[Any], objs: Tuple[Any]):
     result = not ContainsRequirement(collection).are_compatible_with(*objs)
     assert result and isinstance(result, bool)
