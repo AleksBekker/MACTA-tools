@@ -1,5 +1,6 @@
-from macta.utils import is_collection
 import pytest
+
+from macta.utils import is_collection
 
 
 @pytest.mark.parametrize(
