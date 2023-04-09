@@ -1,11 +1,20 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from macta.utils import is_collection
-
 
 class Requirement(ABC):
-    """Class to represent a requirement"""
+    """Class to represent a requirement.
+
+    This class is meant to store a requirement and validate if other values fit this requirement.
+
+    Attributes:
+        __value (Any): the value that is being used to validate other values.
+        __necessary (bool): represents if this requirement must be used in a RequirementList. If this is True, then
+            trying to run a RequirementList validation without checking this Requirement will return False.
+
+    Note:
+        #21 the self.__necessary parameter should be stored in RequirementList, not here
+    """
 
     def __init__(self, value: Any, necessary: bool = False):
         self.__value = value
@@ -43,8 +52,5 @@ class Requirement(ABC):
         Returns:
             `True` if all values in `args` are compatible with this requirement or if `args` is empty, `False` otherwise
         """
-
-        if len(args) == 1 and is_collection(args[0]):
-            args = args[0]
 
         return all(self.is_compatible_with(arg) for arg in args)
