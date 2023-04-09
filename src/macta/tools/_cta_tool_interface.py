@@ -1,4 +1,16 @@
-"""Implementation of abstract class for an interface to a CTA tool."""
+"""Implements abstract class for an interface to a CTA tool.
+
+This file creates an abstraction for an automatic cell type annotation (CTA) tool. You can import
+`macta.tools.CTAToolInterface` and simply implement the `annotate`, `convert`, and `requirements` methods, and
+optionally the `preprocess_expr`, and `preprocess_ref` methods to define most if not all CTA tools' behavior. After
+these methods are defined, you can run the tool using the `run_full` method.
+
+Typical usage example:
+
+    Refer to the `_celltypeist_interface` method in the same directory as this file.
+"""
+
+# TODO #18 define typical usage in the above comment
 
 from abc import ABC, abstractmethod
 from anndata import AnnData
@@ -7,23 +19,60 @@ from typing import Any, Dict, Optional
 
 from macta.utils import requirements as rqs
 
+# #20 test this:
+# ExpressionType = TypeVar('ExpressionType')
+# ReferenceType = TypeVar('ReferenceType')
+
 
 class CTAToolInterface(ABC):
-    """Abstract class for tool interfaces"""
+    """Abstraction for a python interface to a cell type annotation (CTA) tool.
 
-    # TODO: possibly do this using abstract properties
+    Defines the logic surrounding running a CTA tool, while abstracting away the actual logic of the specific CTA code.
+    A subclass of `CTAToolInterface` has to set the `requirements` property, implement the `annotate` and `convert`
+    methods, and optionally also implement the `preprocess_expr` and `preprocess_ref` methods. Then, you can run the new
+    class's `run_full` method to perform its cell type annotation analysis.
+
+    Attributes:
+        requirements (RequirementList): a requirement list that dictates how some of the arguments passed to this CTA
+            tool should appear/behave.
+    """
+
     __requirements: Optional[rqs.RequirementList] = None
 
     # region Class Property Methods
 
+    # TODO #19 make the requirements getter abstract and delete the setter
+
     @property
     def requirements(self) -> rqs.RequirementList:
+        """Gets the list of requirements to run this CTATool.
+
+        Retrieves the requirements from `self.__requirements`. These requirements determine if this CTA tool is
+        appropriate for the given call.
+
+        Returns:
+            A `RequirementList`. This can be treated as a dict[str, Requirement], where the key is the associated
+            key work for a `run_full` parameter.
+
+        Raises:
+            ValueError: if `self.__requirements` remains not implemented in a subclass
+        """
+
         if self.__requirements is None:
             raise TypeError('Abstract field `__requirements` has not been set during class creation')
         return self.__requirements
 
     @requirements.setter
     def requirements(self, value: Dict[str, rqs.Requirement]) -> None:
+        """Sets this CTA tool's list of requirements
+
+        Arguments:
+            value (Dict[str, Requirement]): A `dict` mapping `run_full` parameter names to their respective
+                requirements. `self.__requirements` gets replaced by the `RequirementList` created using this value.
+
+        Raises:
+            ValueError: if `value` is not a `dict[str, Requirement]`
+        """
         try:
             assert isinstance(value, dict)
             assert rqs.IsInstanceRequirement(str).are_compatible_with(*value.keys())
@@ -32,6 +81,8 @@ class CTAToolInterface(ABC):
             raise ValueError('`CTAToolInterface.requirements must be a dictionary of `str` -> `Requirement`') from e
 
     # endregion
+
+    # TODO #19 make the rest of the methods in this class static methods
 
     # region Abstract methods
 
