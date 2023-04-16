@@ -26,8 +26,8 @@ class CTAToolInterface(ABC):
     def requirements(self, value: Dict[str, rqs.Requirement]) -> None:
         try:
             assert isinstance(value, dict)
-            assert rqs.IsInstanceRequirement(str).are_compatible_with(*value.keys())
-            assert rqs.IsInstanceRequirement(rqs.Requirement).are_compatible_with(*value.values())
+            assert rqs.IsInstanceRequirement(str).check(*value.keys())
+            assert rqs.IsInstanceRequirement(rqs.Requirement).check(*value.values())
         except AssertionError as e:
             raise ValueError('`CTAToolInterface.requirements must be a dictionary of `str` -> `Requirement`') from e
 
@@ -124,6 +124,6 @@ class CTAToolInterface(ABC):
         if values is None:
             values = {}
 
-        return self.requirements.is_compatible_with(**{**values, **kwargs})
+        return self.requirements.check(**{**values, **kwargs})
 
     # endregion

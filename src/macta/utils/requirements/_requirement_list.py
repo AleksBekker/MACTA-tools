@@ -1,44 +1,31 @@
-from typing import Dict, Optional
+import pydantic
+from pydantic import validator
+from typing import Any, Dict, Optional
 
 from macta.utils.requirements._requirement import Requirement
 from macta.utils.requirements._is_instance_requirement import IsInstanceRequirement
 
 
 # TODO: make this inherit from `dict` and use its methods to store data
-class RequirementList:
-    def __init__(self, requirements: Optional[Dict[str, Requirement]] = None, **kwargs) -> None:
-        """Initializes a `RequirementList` object.
+class RequirementList(pydantic.BaseModel):
+    requirements: Dict[str, Requirement]
 
-        Arguments:
-            requirements (Dict[str, Requirement]): a dictionary detailing multiple
-            requirements that this object should check for
-        """
-        if requirements is None:
+    def __init__(self, requirements: Optional[Dict[str, Requirement]] = None, **kwargs):
+        if not requirements:
             requirements = {}
-        self.requirements = {**requirements, **kwargs}
+        super().__init__(requirements={**requirements, **kwargs})
 
-    # region Class Properties
-
-    @property
-    def requirements(self) -> Dict[str, Requirement]:
-        return self.__requirements
-
-    @requirements.setter
-    def requirements(self, new_requirements: Dict[str, Requirement]) -> None:
+    @validator('requirements')
+    def requirements_correct_dict(cls, requirements: Optional[Dict[str, Requirement]], **kwargs: Any) -> Dict[str, Requirement]:
 
         # Input Validation
-        try:
-            assert isinstance(new_requirements, dict)
-            assert IsInstanceRequirement(str).are_compatible_with(*new_requirements.keys())
-            assert IsInstanceRequirement(Requirement).are_compatible_with(*new_requirements.values())
-        except AssertionError as e:
-            raise ValueError('`new_requirements` must be a dict mapping `str` -> `Requirement`') from e
+        if not isinstance(requirements, dict) or not IsInstanceRequirement(str).check(*requirements.keys()) \
+                or not IsInstanceRequirement(Requirement).check(*requirements.values()):
+            raise ValueError('`new_requirements` must be a dict mapping `str` -> `Requirement`')
 
-        self.__requirements = new_requirements
+        return requirements
 
-    # endregion
-
-    def is_compatible_with(self, **kwargs) -> bool:
+    def check(self, **kwargs: Dict[str, Requirement]) -> bool:
         """Check if a set of other values is compatible with this `RequirementList`
 
         Arguments:
@@ -48,5 +35,4 @@ class RequirementList:
             `True` if all of the `other_values` are compatible with this `RequirementList`'s requirements
         """
 
-        # TODO: find out if some kind of `zip` or related function is possible with dictionaries
-        return all(self.requirements[k].is_compatible_with(v) for k, v in kwargs.items())
+        return all(self.requirements[k].check(v) for k, v in kwargs.items())

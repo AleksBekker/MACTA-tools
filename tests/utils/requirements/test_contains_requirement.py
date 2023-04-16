@@ -1,7 +1,6 @@
 import pytest
-from functools import lru_cache
 from itertools import permutations
-from typing import Any, Collection, Iterable, List, Tuple
+from typing import Any, Collection, List, Tuple
 
 from macta.utils.requirements import ContainsRequirement
 
@@ -16,7 +15,7 @@ from macta.utils.requirements import ContainsRequirement
     ids=['str', 'tuple', 'list', 'set', 'dict']
 )
 def test_contains_requirement_is_compatible_with_passes(collection: Collection[Any], obj: Any):
-    result = ContainsRequirement(collection).is_compatible_with(obj)
+    result = ContainsRequirement(collection).check(obj)
     assert result and isinstance(result, bool)
 
 
@@ -31,28 +30,27 @@ def test_contains_requirement_is_compatible_with_passes(collection: Collection[A
     ids=['str', 'tuple', 'list', 'set', 'dict_key', 'dict_value']
 )
 def test_contains_requirement_is_compatible_with_fails(collection: Collection[Any], obj: Any):
-    result = not ContainsRequirement(collection).is_compatible_with(obj)
+    result = not ContainsRequirement(collection).check(obj)
     assert result and isinstance(result, bool)
 
 
-@lru_cache
-def perms(iterable: Iterable[Any]) -> List[Tuple[Any]]:
-    return list(permutations(iterable))
+permutations_abc = list(permutations('abc'))
+permutations_012 = list(permutations((0, 1, 2)))
 
 
-@pytest.mark.parametrize('collection, objs', [
-    *(('abc', perm) for perm in perms('abc')),
-    *((('a', 'b', 'c'), perm) for perm in perms('abc')),
-    *((['a', 'b', 'c'], perm) for perm in perms('abc')),
-    *(({'a', 'b', 'c'}, perm) for perm in perms('abc')),
-    *(({'a': 0, 'b': 1, 'c': 2}, perm) for perm in perms('abc')),
-    *(((0, 1, 2), perm) for perm in perms((0, 1, 2))),
-    *(([0, 1, 2], perm) for perm in perms((0, 1, 2))),
-    *(({0, 1, 2}, perm) for perm in perms((0, 1, 2))),
-    *(({0: 'a', 1: 'b', 2: 'c'}, perm) for perm in perms((0, 1, 2))),
+@pytest.mark.parametrize('collection, perm', [
+    *(('abc', perm) for perm in permutations_abc),
+    *((('a', 'b', 'c'), perm) for perm in permutations_abc),
+    *((['a', 'b', 'c'], perm) for perm in permutations_abc),
+    *(({'a', 'b', 'c'}, perm) for perm in permutations_abc),
+    *(({'a': 0, 'b': 1, 'c': 2}, perm) for perm in permutations_abc),
+    *(((0, 1, 2), perm) for perm in permutations_012),
+    *(([0, 1, 2], perm) for perm in permutations_012),
+    *(({0, 1, 2}, perm) for perm in permutations_012),
+    *(({0: 'a', 1: 'b', 2: 'c'}, perm) for perm in permutations_012),
 ])
-def test_contains_requirement_are_compatible_with_passes(collection: Collection[Any], objs: Tuple[Any]):
-    result = ContainsRequirement(collection).are_compatible_with(*objs)
+def test_contains_requirement_check_permutations_passes(collection: Collection[Any], perm: List[Any]):
+    result = ContainsRequirement(collection).check(*perm)
     assert result and isinstance(result, bool)
 
 
@@ -76,5 +74,5 @@ def test_contains_requirement_are_compatible_with_passes(collection: Collection[
     ({0: 'a', 1: 'b', 2: 'c', 3: 'd'}, [0, 1, 2, 'a', 'b']),
 ])
 def test_contains_requirement_are_compatible_with_fails(collection: Collection[Any], objs: Tuple[Any]):
-    result = not ContainsRequirement(collection).are_compatible_with(*objs)
+    result = not ContainsRequirement(collection).check(*objs)
     assert result and isinstance(result, bool)

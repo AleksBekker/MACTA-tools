@@ -25,7 +25,7 @@ class CelltypistInterface(CTAToolInterface):
     # Define requirements
     def __post_init__(self):
         self.requirements = rqs.RequirementList(
-            annot_type=rqs.StrictRequirement('ref'),
+            annot_type=rqs.EqualityRequirement('ref'),
         )
 
     def annotate(self, expr_data: AnnData, ref_data: models.Model, **kwargs) -> AnnotationResult:

@@ -1,10 +1,10 @@
 import pytest
-from typing import Any, Type
+from typing import Any
 
 from macta.utils.requirements import IsInstanceRequirement
 
 
-@pytest.mark.parametrize('cls, obj', [
+@pytest.mark.parametrize('obj_type, obj', [
     (bool, True),
     (bool, False),
     (int, 10),
@@ -31,6 +31,6 @@ from macta.utils.requirements import IsInstanceRequirement
     (dict, {}),
     (dict, {0: 'a', 1: 'b'}),
 ])
-def test_is_instance_is_compatible_with_builtins_passes(cls: Type, obj: Any):
-    result = IsInstanceRequirement(cls).is_compatible_with(obj)
+def test_is_instance_check_builtins_passes(obj_type: type, obj: Any):
+    result = IsInstanceRequirement(obj_type).check(obj)
     assert result and isinstance(result, bool)
