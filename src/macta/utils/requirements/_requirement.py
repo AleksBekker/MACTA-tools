@@ -1,50 +1,30 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from dataclasses import dataclass
+from typing import Any, Sequence, Union
 
-from macta.utils import is_collection
 
-
+@dataclass(frozen=True)
 class Requirement(ABC):
-    """Class to represent a requirement"""
-
-    def __init__(self, value: Any, necessary: bool = False):
-        self.__value = value
-        self.__necessary = necessary
-
-    # region Properties
-
-    @property
-    def value(self):
-        return self.__value
-
-    @property
-    def necessary(self):
-        return self.__necessary
-
-    # endregion
+    value: Any
 
     @abstractmethod
-    def is_compatible_with(self, other_value) -> bool:
-        """Determines if the `other_value` is compatible with this requirement.
+    def _checker(self, checked: Any) -> bool:
+        """Abstract method that checks if a certain value upholds this requirement
 
         Arguments:
-            other_value: the value to which this requirement is compared to
+            checked (Any): the value that is checked against this requirement
 
         Returns:
-            `True` if `other_value` is compatible, `False` otherwise
+            True if this requirement is upheld, False otherwise
         """
 
-    def are_compatible_with(self, *args) -> bool:
-        """Determines if multiple values are compatible with this requirement.
+    def check(self, *args: Union[Sequence[Any], Any]) -> bool:
+        """Checks if values uphold this requirement
 
         Arguments:
-            *args: the values to which this requirement is compared to
+            *args (Sequence[Any]): any amount of values to test against this requirement
 
         Returns:
-            `True` if all values in `args` are compatible with this requirement or if `args` is empty, `False` otherwise
+            True if every value in args passes, False otherwise
         """
-
-        if len(args) == 1 and is_collection(args[0]):
-            args = args[0]
-
-        return all(self.is_compatible_with(arg) for arg in args)
+        return all(self._checker(arg) for arg in args)
