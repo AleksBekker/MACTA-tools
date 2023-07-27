@@ -10,7 +10,7 @@ from macta.utils.requirements._is_instance_requirement import IsInstanceRequirem
 class RequirementList(pydantic.BaseModel):
     requirements: Dict[str, Requirement]
 
-    def __init__(self, requirements: Optional[Dict[str, Requirement]] = None, **kwargs):
+    def __init__(self, requirements: Optional[Dict[str, Requirement]] = None, **kwargs: Any):
         if not requirements:
             requirements = {}
         super().__init__(requirements={**requirements, **kwargs})

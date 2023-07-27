@@ -8,7 +8,7 @@ class IsInstanceRequirement(Requirement):
     """Requirement that checks that an object is an instance of a specific type"""
 
     @validator('value')
-    def value_is_type(cls, value) -> type:
+    def value_is_type(cls, value: Any) -> type:
         """Validates that `self.value` is a `type`
 
         Raises:
