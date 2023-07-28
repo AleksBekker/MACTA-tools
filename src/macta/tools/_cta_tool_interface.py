@@ -17,9 +17,7 @@ class CTAToolInterface(ABC):
     # region Class Property Methods
 
     @property
-    def requirements(self) -> rqs.RequirementList:
-        if self.__requirements is None:
-            raise TypeError('Abstract field `__requirements` has not been set during class creation')
+    def requirements(self) -> Optional[rqs.RequirementList]:
         return self.__requirements
 
     @requirements.setter
@@ -124,6 +122,9 @@ class CTAToolInterface(ABC):
         if values is None:
             values = {}
 
-        return self.requirements.check(**{**values, **kwargs})
+        if self.requirements is None:
+            return True
+
+        return self.requirements.check(**values, **kwargs)
 
     # endregion

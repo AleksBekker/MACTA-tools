@@ -5,3 +5,5 @@ from macta.utils.requirements._is_instance_requirement import IsInstanceRequirem
 from macta.utils.requirements._equality_requirement import EqualityRequirement
 
 from macta.utils.requirements._requirement_list import RequirementList
+
+__all__ = ['Requirement', 'ContainsRequirement', 'IsInstanceRequirement', 'EqualityRequirement', 'RequirementList']
