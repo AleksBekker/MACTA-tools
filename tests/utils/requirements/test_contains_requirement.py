@@ -14,7 +14,7 @@ from macta.utils.requirements import ContainsRequirement
 ],
     ids=['str', 'tuple', 'list', 'set', 'dict']
 )
-def test_contains_requirement_is_compatible_with_passes(collection: Collection[Any], obj: Any):
+def test_contains_requirement_is_compatible_with_passes(collection: Collection[Any], obj: Any) -> None:
     result = ContainsRequirement(collection).check(obj)
     assert result and isinstance(result, bool)
 
@@ -29,7 +29,7 @@ def test_contains_requirement_is_compatible_with_passes(collection: Collection[A
 ],
     ids=['str', 'tuple', 'list', 'set', 'dict_key', 'dict_value']
 )
-def test_contains_requirement_is_compatible_with_fails(collection: Collection[Any], obj: Any):
+def test_contains_requirement_is_compatible_with_fails(collection: Collection[Any], obj: Any) -> None:
     result = not ContainsRequirement(collection).check(obj)
     assert result and isinstance(result, bool)
 
@@ -49,7 +49,7 @@ permutations_012 = list(permutations((0, 1, 2)))
     *(({0, 1, 2}, perm) for perm in permutations_012),
     *(({0: 'a', 1: 'b', 2: 'c'}, perm) for perm in permutations_012),
 ])
-def test_contains_requirement_check_permutations_passes(collection: Collection[Any], perm: List[Any]):
+def test_contains_requirement_check_permutations_passes(collection: Collection[Any], perm: List[Any]) -> None:
     result = ContainsRequirement(collection).check(*perm)
     assert result and isinstance(result, bool)
 
@@ -73,6 +73,6 @@ def test_contains_requirement_check_permutations_passes(collection: Collection[A
     ({0: 'a', 1: 'b', 2: 'c', 3: 'd'}, [*(2 for _ in range(1000)), 4, 3, 1]),
     ({0: 'a', 1: 'b', 2: 'c', 3: 'd'}, [0, 1, 2, 'a', 'b']),
 ])
-def test_contains_requirement_are_compatible_with_fails(collection: Collection[Any], objs: Tuple[Any]):
+def test_contains_requirement_are_compatible_with_fails(collection: Collection[Any], objs: Tuple[Any]) -> None:
     result = not ContainsRequirement(collection).check(*objs)
     assert result and isinstance(result, bool)

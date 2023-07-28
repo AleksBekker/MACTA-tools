@@ -1,40 +1,23 @@
 """Implementation of abstract class for an interface to a CTA tool."""
 
 from abc import ABC, abstractmethod
-from anndata import AnnData
-import pandas as pd
 from typing import Any, Dict, Optional
+
+import pandas as pd
+import pydantic
 
 from macta.utils import requirements as rqs
 
 
-class CTAToolInterface(ABC):
+class CTAToolInterface(pydantic.BaseModel, ABC):
     """Abstract class for tool interfaces"""
 
-    # TODO: possibly do this using abstract properties
-    __requirements: Optional[rqs.RequirementList] = None
-
-    # region Class Property Methods
-
-    @property
-    def requirements(self) -> Optional[rqs.RequirementList]:
-        return self.__requirements
-
-    @requirements.setter
-    def requirements(self, value: Dict[str, rqs.Requirement]) -> None:
-        try:
-            assert isinstance(value, dict)
-            assert rqs.IsInstanceRequirement(str).check(*value.keys())
-            assert rqs.IsInstanceRequirement(rqs.Requirement).check(*value.values())
-        except AssertionError as e:
-            raise ValueError('`CTAToolInterface.requirements must be a dictionary of `str` -> `Requirement`') from e
-
-    # endregion
+    requirements: Optional[rqs.RequirementList] = None
 
     # region Abstract methods
 
     @abstractmethod
-    def annotate(self, expr_data: AnnData, ref_data, **kwargs):
+    def annotate(self, expr_data: Any, ref_data: Any, **kwargs: Any) -> Any:
         """Runs annotation using tool.
 
         Arguments:
@@ -46,7 +29,7 @@ class CTAToolInterface(ABC):
         """
 
     @abstractmethod
-    def convert(self, results, convert_to: str, **kwargs) -> pd.Series:
+    def convert(self, results: Any, convert_to: str, **kwargs: Any) -> pd.Series:
         """Converts results to standardized format
 
         Arguments:
@@ -61,7 +44,7 @@ class CTAToolInterface(ABC):
 
     # region Pre-processing methods
 
-    def preprocess_expr(self, expr_data: AnnData, **kwargs):
+    def preprocess_expr(self, expr_data: Any, **kwargs: Any) -> Any:
         """Pre-process expr_data for use in a specific algorithm.
 
         Arguments:
@@ -72,7 +55,7 @@ class CTAToolInterface(ABC):
         """
         return expr_data
 
-    def preprocess_ref(self, ref_data, **kwargs):
+    def preprocess_ref(self, ref_data: Any, **kwargs: Any) -> Any:
         """Pre-process expr_data for use in a specific algorithm.
 
         Arguments:
@@ -87,7 +70,7 @@ class CTAToolInterface(ABC):
 
     # region Other class methods for annotation
 
-    def run_full(self, expr_data: AnnData, ref_data, convert_to: str, **kwargs) -> pd.Series:
+    def run_full(self, expr_data: Any, ref_data: Any, convert_to: str, **kwargs: Any) -> pd.Series:
         """Run `self.annotate`, followed by `self.convert` on a data set.
 
         Arguments:
@@ -100,17 +83,17 @@ class CTAToolInterface(ABC):
             `convert_to` format
         """
 
-        expr_data_prepped = self.preprocess_expr(expr_data, **kwargs)
-        ref_data_prepped = self.preprocess_ref(ref_data, **kwargs)
+        expr_data = self.preprocess_expr(expr_data, **kwargs)
+        ref_data = self.preprocess_ref(ref_data, **kwargs)
 
-        results = self.annotate(expr_data_prepped, ref_data_prepped, **kwargs)
+        results = self.annotate(expr_data, ref_data, **kwargs)
         return self.convert(results, convert_to, **kwargs)
 
     # endregion
 
     # region Class methods for requirement validation
 
-    def is_compatible_with(self, values: Optional[Dict[str, Any]] = None, **kwargs) -> bool:
+    def check_requirements(self, values: Optional[Dict[str, Any]] = None, **kwargs: Any) -> bool:
         """Check if a set of other values is compatible with this annotation tool interface
 
         Arguments:
@@ -119,11 +102,11 @@ class CTAToolInterface(ABC):
         Returns:
             `True` if all of the `other_values` are compatible with this `RequirementList`'s requirements
         """
-        if values is None:
-            values = {}
-
         if self.requirements is None:
             return True
+
+        if values is None:
+            values = {}
 
         return self.requirements.check(**values, **kwargs)
 

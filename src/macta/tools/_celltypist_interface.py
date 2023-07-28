@@ -1,17 +1,17 @@
 """Wrapper code for `celltypist`."""
 
-from anndata import AnnData
+import logging
+from dataclasses import dataclass
+from typing import Any, Union
+
 import celltypist
+import pandas as pd
+from anndata import AnnData
 from celltypist import models
 from celltypist.classifier import AnnotationResult
-from dataclasses import dataclass
-import logging
-import pandas as pd
-from typing import Union
 
 from macta.tools import CTAToolInterface
 from macta.utils import requirements as rqs
-
 
 # Disable `celltypist`'s trivial output logs
 logging.getLogger(celltypist.__name__).setLevel(logging.ERROR)
@@ -23,12 +23,12 @@ class CelltypistInterface(CTAToolInterface):
 
     # TODO: possibly do this using abstract properties
     # Define requirements
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.requirements = rqs.RequirementList(
             annot_type=rqs.EqualityRequirement('ref'),
         )
 
-    def annotate(self, expr_data: AnnData, ref_data: models.Model, **kwargs) -> AnnotationResult:
+    def annotate(self, expr_data: AnnData, ref_data: models.Model, **kwargs: Any) -> AnnotationResult:
         """Runs annotation using `celltypist`.
 
         Arguments:
@@ -40,7 +40,7 @@ class CelltypistInterface(CTAToolInterface):
         """
         return celltypist.annotate(expr_data, model=ref_data, majority_voting=True)
 
-    def convert(self, results: AnnotationResult, convert_to: str, **kwargs) -> pd.Series:
+    def convert(self, results: AnnotationResult, convert_to: str, **kwargs: Any) -> pd.Series:
         """Converts `celltypist` results to standardized format.
 
         Arguments:
@@ -56,7 +56,7 @@ class CelltypistInterface(CTAToolInterface):
 
         raise ValueError(f'{convert_to} is an invalid option for `convert_to`')
 
-    def preprocess_ref(self, ref_data: Union[AnnData, str], **kwargs) -> models.Model:
+    def preprocess_ref(self, ref_data: Union[AnnData, str], **kwargs: Any) -> models.Model:
 
         kwargs = {
             'update_models': True,

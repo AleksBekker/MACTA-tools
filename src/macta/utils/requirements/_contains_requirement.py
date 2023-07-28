@@ -1,4 +1,4 @@
-from pydantic import validator
+from pydantic import field_validator
 from typing import Any, Iterable
 
 from macta.utils.requirements._requirement import Requirement
@@ -7,7 +7,7 @@ from macta.utils.requirements._requirement import Requirement
 class ContainsRequirement(Requirement):
     """Class to represent a requirement for a value/values to be elements of a container"""
 
-    @validator('value')
+    @field_validator('value')
     def value_is_iterable(cls, value: Any) -> Iterable[Any]:
         """Validates that `self.value` is an `Iterable`
 

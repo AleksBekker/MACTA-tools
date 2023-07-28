@@ -1,5 +1,5 @@
 import pydantic
-from pydantic import validator
+from pydantic import field_validator
 from typing import Any, Dict, Optional
 
 from macta.utils.requirements._requirement import Requirement
@@ -15,8 +15,8 @@ class RequirementList(pydantic.BaseModel):
             requirements = {}
         super().__init__(requirements={**requirements, **kwargs})
 
-    @validator('requirements')
-    def requirements_correct_dict(cls, requirements: Optional[Dict[str, Requirement]], **kwargs: Any) -> Dict[str, Requirement]:
+    @field_validator('requirements')
+    def requirements_correct_dict(cls, requirements: Optional[Dict[str, Requirement]] = None, **kwargs: Any) -> Dict[str, Requirement]:
 
         # Input Validation
         if not isinstance(requirements, dict) or not IsInstanceRequirement(str).check(*requirements.keys()) \
@@ -25,7 +25,7 @@ class RequirementList(pydantic.BaseModel):
 
         return requirements
 
-    def check(self, **kwargs: Dict[str, Any]) -> bool:
+    def check(self, **kwargs: Any) -> bool:
         """Check if a set of other values is compatible with this `RequirementList`
 
         Arguments:
