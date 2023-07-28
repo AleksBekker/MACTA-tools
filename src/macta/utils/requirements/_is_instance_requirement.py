@@ -1,4 +1,4 @@
-from pydantic import validator
+from pydantic import field_validator
 from typing import Any
 
 from macta.utils.requirements._requirement import Requirement
@@ -7,7 +7,7 @@ from macta.utils.requirements._requirement import Requirement
 class IsInstanceRequirement(Requirement):
     """Requirement that checks that an object is an instance of a specific type"""
 
-    @validator('value')
+    @field_validator('value')
     def value_is_type(cls, value: Any) -> type:
         """Validates that `self.value` is a `type`
 
