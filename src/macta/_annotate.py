@@ -66,8 +66,8 @@ def run_tool(tool_name: str, interface: CTAToolInterface, expr_data: AnnData, re
         logging.warn(f'{tool_name}: no requirements available. Proceeding with run.')
         return None
 
-    if not interface.requirements.check(expr_data=expr_data, ref_data=ref_data, annot_type=annot_type,  # type: ignore
-                                        result_type=result_type, **kwargs):  # type: ignore
+    if not interface.requirements.check(expr_data=expr_data, ref_data=ref_data, annot_type=annot_type,
+                                        result_type=result_type, **kwargs):
         logging.warn(f'{tool_name}: incompatible requirements. Skipping this tool.')
         return None
 

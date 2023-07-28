@@ -1,7 +1,7 @@
 from macta.utils.requirements import EqualityRequirement, RequirementList
 
 
-def test_basic_rqlist():
+def test_basic_rqlist() -> None:
     """Tests that a basic valid `RequirementList` works"""
 
     rqlist = RequirementList({

@@ -31,6 +31,6 @@ from macta.utils.requirements import IsInstanceRequirement
     (dict, {}),
     (dict, {0: 'a', 1: 'b'}),
 ])
-def test_is_instance_check_builtins_passes(obj_type: type, obj: Any):
+def test_is_instance_check_builtins_passes(obj_type: type, obj: Any) -> None:
     result = IsInstanceRequirement(obj_type).check(obj)
     assert result and isinstance(result, bool)
