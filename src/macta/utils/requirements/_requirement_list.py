@@ -25,11 +25,11 @@ class RequirementList(pydantic.BaseModel):
 
         return requirements
 
-    def check(self, **kwargs: Dict[str, Requirement]) -> bool:
+    def check(self, **kwargs: Dict[str, Any]) -> bool:
         """Check if a set of other values is compatible with this `RequirementList`
 
         Arguments:
-            **kwargs: requirements to be tested
+            **kwargs: values to be tested against requirements
 
         Returns:
             `True` if all of the `other_values` are compatible with this `RequirementList`'s requirements
