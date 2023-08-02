@@ -1,5 +1,6 @@
-from pydantic import field_validator
 from typing import Any, Iterable
+
+from pydantic import field_validator
 
 from macta.utils.requirements._requirement import Requirement
 

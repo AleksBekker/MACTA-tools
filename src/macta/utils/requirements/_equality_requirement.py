@@ -1,4 +1,5 @@
 from typing import Any, cast
+
 from macta.utils.requirements._requirement import Requirement
 
 
