@@ -4,6 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "macta"
+version = "0.0.4"
 authors = [{ name = "Aleksandr Bekker", email = "alekso.bekker@gmail.com" }]
 description = "Annotation tools for the MACTA suite"
 keywords = ["cell type annotation", "single cell"]
@@ -13,8 +14,8 @@ license = { text = "GPL3" }
 classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
 ]
 dependencies = [
     "anndata>=0.8.0",
@@ -22,7 +23,9 @@ dependencies = [
     "pydantic>=2.0.0",
     "scanpy>=1.9.3",
 ]
-version = "0.4.0"
+
+[project.urls]
+"Homepage" = "https://github.com/AleksBekker/MACTA_py"
 
 [project.optional-dependencies]
 
