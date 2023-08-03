@@ -4,7 +4,7 @@ import pytest
 try:
     from macta.tools import ScanviInterface
 except ImportError:
-    pytest.skip(allow_module_level=True, msg='SCANVI-compatible extra not installed.')
+    pytest.skip(allow_module_level=True, reason='SCANVI-compatible extra not installed.')
 
 
 class TestScanviRqlist:

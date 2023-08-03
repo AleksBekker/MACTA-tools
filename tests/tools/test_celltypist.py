@@ -4,7 +4,7 @@ import pytest
 try:
     from macta.tools import CelltypistInterface
 except ImportError:
-    pytest.skip(allow_module_level=True, msg='Celltypist-compatible extra not installed.')
+    pytest.skip(allow_module_level=True, reason='Celltypist-compatible extra not installed.')
 
 
 class TestCelltypistRqlist():
