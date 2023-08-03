@@ -37,7 +37,15 @@ py310 = ["macta[celltypist]"]
 torch38 = ["macta[scanvi]"]
 
 # Testing extras
-testing = ["flake8", "flake8-quotes", "mypy", "pytest", "pytest-cov", "tox"]
+testing = [
+    "flake8",
+    "flake8-quotes",
+    "isort",
+    "mypy",
+    "pytest",
+    "pytest-cov",
+    "tox",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]

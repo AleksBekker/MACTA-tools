@@ -6,12 +6,13 @@ from typing import Any, Container, Dict, Optional, Union
 import pandas as pd
 from anndata import AnnData
 
-from macta.tools import CelltypistInterface, CTAToolInterface
+from macta.tools import AVAILABLE, CTAToolInterface
 
 
 def annotate(expr_data: AnnData, ref_data: Union[AnnData, pd.DataFrame], annot_type: str, result_type: str = 'labels',
              annot_tools: Union[str, Container[str]] = '*',
-             tool_interfaces: Optional[Dict[str, CTAToolInterface]] = None, **kwargs: Any) -> Dict[str, Union[pd.Series, pd.DataFrame]]:
+             tool_interfaces: Optional[Dict[str, CTAToolInterface]] = None, **kwargs: Any
+             ) -> Dict[str, Union[pd.Series, pd.DataFrame]]:
     """Runs MACTA annotation analysis.
 
     Arguments:
@@ -27,7 +28,7 @@ def annotate(expr_data: AnnData, ref_data: Union[AnnData, pd.DataFrame], annot_t
     """
 
     if tool_interfaces is None:
-        tool_interfaces = {'celltypist': CelltypistInterface()}
+        tool_interfaces = AVAILABLE
 
     if annot_tools == '*':
         annot_tools = list(tool_interfaces.keys())
@@ -75,6 +76,7 @@ def run_tool(tool_name: str, interface: CTAToolInterface, expr_data: AnnData, re
         return interface.run_full(expr_data, ref_data, result_type, **kwargs)
 
     except ImportError:
+        # NOTE this should never occur if the tool_interfaces are set according to what can be imported
         logging.error(f'{tool_name}: required packages not imported. Skipping this tool.')
 
     except Exception as e:

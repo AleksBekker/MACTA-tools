@@ -3,12 +3,15 @@ from typing import Any, Union
 
 import numpy as np
 import pandas as pd
-import scanpy as sc
 from scanpy import AnnData
-from scarches.models import SCANVI, SCVI
 
 from macta.tools import CTAToolInterface
+from macta.utils.contexts import suppress_logging
 from macta.utils.requirements import EqualityRequirement, NotNoneRequirement, RequirementList
+
+# Suppress the output that comes with importing scArches
+with suppress_logging():
+    from scarches import SCANVI, SCVI
 
 
 class ScanviInterface(CTAToolInterface):
@@ -93,7 +96,7 @@ class ScanviInterface(CTAToolInterface):
 
         scanvae.train(max_epochs=20)
 
-        reference_latent = sc.AnnData(scanvae.get_latent_representation())
+        reference_latent = AnnData(scanvae.get_latent_representation())
         reference_latent['scanvi_cell_type'] = ref_data.obs[cell_type_col].tolist()
         reference_latent['scanvi_batch'] = ref_data.obs[batch_col].tolist()
 
