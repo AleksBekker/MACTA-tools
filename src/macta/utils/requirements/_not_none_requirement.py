@@ -1,6 +1,6 @@
 from typing import Any, Optional
 
-from macta.utils.requirements import Requirement
+from macta.utils.requirements._requirement import Requirement
 
 
 class NotNoneRequirement(Requirement):
