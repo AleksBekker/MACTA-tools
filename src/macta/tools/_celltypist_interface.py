@@ -10,7 +10,7 @@ from anndata import AnnData
 from celltypist import models
 from celltypist.classifier import AnnotationResult
 
-from macta.tools import CTAToolInterface
+from macta.tools._cta_tool_interface import CTAToolInterface
 from macta.utils.requirements import EqualityRequirement, RequirementList
 
 # Disable `celltypist`'s trivial output logs

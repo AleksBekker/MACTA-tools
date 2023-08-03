@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from scanpy import AnnData
 
-from macta.tools import CTAToolInterface
+from macta.tools._cta_tool_interface import CTAToolInterface
 from macta.utils.contexts import suppress_logging
 from macta.utils.requirements import EqualityRequirement, NotNoneRequirement, RequirementList
 
