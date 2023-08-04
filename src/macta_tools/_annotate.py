@@ -6,7 +6,7 @@ from typing import Any, Container, Dict, Optional, Union
 import pandas as pd
 from anndata import AnnData
 
-from macta.tools import AVAILABLE, CTAToolInterface
+from macta_tools.tools import AVAILABLE, CTAToolInterface
 
 
 def annotate(expr_data: AnnData, ref_data: Union[AnnData, pd.DataFrame], annot_type: str, result_type: str = 'labels',

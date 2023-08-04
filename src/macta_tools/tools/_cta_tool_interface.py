@@ -5,7 +5,7 @@ from typing import Any, Dict, Optional, Union
 
 import pandas as pd
 
-from macta.utils.requirements import RequirementList
+from macta_tools.utils.requirements import RequirementList
 
 
 class CTAToolInterface(ABC):

@@ -3,7 +3,7 @@ from typing import Any, Collection, List, Tuple
 
 import pytest
 
-from macta.utils.requirements import ContainsRequirement
+from macta_tools.utils.requirements import ContainsRequirement
 
 
 @pytest.mark.parametrize('collection, obj', [

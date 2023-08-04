@@ -5,9 +5,9 @@ import numpy as np
 import pandas as pd
 from scanpy import AnnData
 
-from macta.tools._cta_tool_interface import CTAToolInterface
-from macta.utils.contexts import suppress_logging
-from macta.utils.requirements import EqualityRequirement, NotNoneRequirement, RequirementList
+from macta_tools.tools._cta_tool_interface import CTAToolInterface
+from macta_tools.utils.contexts import suppress_logging
+from macta_tools.utils.requirements import EqualityRequirement, NotNoneRequirement, RequirementList
 
 # Suppress the output that comes with importing scArches
 with suppress_logging():

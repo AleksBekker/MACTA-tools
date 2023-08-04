@@ -2,7 +2,7 @@ from typing import Any
 
 import pytest
 
-from macta.utils.requirements import IsInstanceRequirement
+from macta_tools.utils.requirements import IsInstanceRequirement
 
 
 @pytest.mark.parametrize('obj_type, obj', [

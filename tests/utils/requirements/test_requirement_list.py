@@ -1,4 +1,4 @@
-from macta.utils.requirements import EqualityRequirement, RequirementList
+from macta_tools.utils.requirements import EqualityRequirement, RequirementList
 
 
 def test_basic_rqlist() -> None:

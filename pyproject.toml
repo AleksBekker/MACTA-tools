@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "macta"
+name = "macta_tools"
 version = "0.0.4"
 authors = [{ name = "Aleksandr Bekker", email = "alekso.bekker@gmail.com" }]
 description = "Annotation tools for the MACTA suite"
@@ -34,10 +34,10 @@ celltypist = ["celltypist>=1.3.0"]
 scanvi = ["scvi-tools", "scarches"]
 
 # Per-version extras
-py38 = ["macta[celltypist]"]
-py39 = ["macta[celltypist]"]
-py310 = ["macta[celltypist]"]
-torch38 = ["macta[scanvi]"]
+py38 = ["macta_tools[celltypist]"]
+py39 = ["macta_tools[celltypist]"]
+py310 = ["macta_tools[celltypist]"]
+torch38 = ["macta_tools[scanvi]"]
 
 # Testing extras
 testing = [
@@ -52,14 +52,14 @@ testing = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["macta*"]
+include = ["macta_tools*"]
 namespaces = false
 
 [tool.setuptools.package-data]
 "pkgname" = ["py.typed"]
 
 [tool.pytest.ini_options]
-addopts = "--cov=macta"
+addopts = "--cov=macta_tools"
 testpaths = ["tests"]
 
 [tool.mypy]

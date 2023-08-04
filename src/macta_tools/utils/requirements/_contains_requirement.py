@@ -2,7 +2,7 @@ from typing import Any, Iterable
 
 from pydantic import field_validator
 
-from macta.utils.requirements._requirement import Requirement
+from macta_tools.utils.requirements._requirement import Requirement
 
 
 class ContainsRequirement(Requirement):

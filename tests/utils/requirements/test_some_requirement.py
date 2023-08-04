@@ -2,7 +2,7 @@ from typing import Any, Container
 
 import pytest
 
-from macta.utils.requirements import NotNoneRequirement
+from macta_tools.utils.requirements import NotNoneRequirement
 
 
 def test_not_none_requirement_catches_none() -> None:

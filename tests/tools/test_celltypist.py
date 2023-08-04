@@ -2,7 +2,7 @@ import pytest
 
 # Skip this file if this module cannot be used with the current MACTA installation
 try:
-    from macta.tools import CelltypistInterface
+    from macta_tools.tools import CelltypistInterface
 except ImportError:
     pytest.skip(allow_module_level=True, reason='Celltypist-compatible extra not installed.')
 
