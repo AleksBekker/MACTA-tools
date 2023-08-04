@@ -10,8 +10,8 @@ from anndata import AnnData
 from celltypist import models
 from celltypist.classifier import AnnotationResult
 
-from macta.tools import CTAToolInterface
-from macta.utils import requirements as rqs
+from macta.tools._cta_tool_interface import CTAToolInterface
+from macta.utils.requirements import EqualityRequirement, RequirementList
 
 # Disable `celltypist`'s trivial output logs
 logging.getLogger(celltypist.__name__).setLevel(logging.ERROR)
@@ -21,12 +21,9 @@ logging.getLogger(celltypist.__name__).setLevel(logging.ERROR)
 class CelltypistInterface(CTAToolInterface):
     """Class for interfacing with the `celltypist` tool"""
 
-    # TODO: possibly do this using abstract properties
-    # Define requirements
-    def __post_init__(self) -> None:
-        self.requirements = rqs.RequirementList(
-            annot_type=rqs.EqualityRequirement('ref'),
-        )
+    _requirements = RequirementList(
+        annot_type=EqualityRequirement('ref'),
+    )
 
     def annotate(self, expr_data: AnnData, ref_data: models.Model, **kwargs: Any) -> AnnotationResult:
         """Runs annotation using `celltypist`.
@@ -40,33 +37,47 @@ class CelltypistInterface(CTAToolInterface):
         """
         return celltypist.annotate(expr_data, model=ref_data, majority_voting=True)
 
-    def convert(self, results: AnnotationResult, convert_to: str, **kwargs: Any) -> pd.Series:
+    def convert(self, results: AnnotationResult, convert_to: str, **kwargs: Any) -> Union[pd.DataFrame, pd.Series]:
         """Converts `celltypist` results to standardized format.
 
         Arguments:
             results (AnnotationResult): celltypist results
-            convert_to (str): format to which `res` will be converted
+            convert_to (str): format to which `results` will be converted
 
         Returns:
-            `pandas.Series` object containing data in the `convert_to` format
+            `pandas` object containing data in the `convert_to` format
         """
 
         if convert_to == 'labels':
             return results.predicted_labels.majority_voting
 
+        if convert_to == 'scores':
+            return results.probability_matrix
+
         raise ValueError(f'{convert_to} is an invalid option for `convert_to`')
 
-    def preprocess_ref(self, ref_data: Union[AnnData, str], **kwargs: Any) -> models.Model:
+    def preprocess_ref(self, ref_data: Union[AnnData, str], update_models: bool = True, force_update: bool = True,
+                       **kwargs: Any) -> models.Model:
+        """Preprocesses the reference data into a `celltypist.models.Model`.
 
-        kwargs = {
-            'update_models': True,
-            'force_update': True,
-            **kwargs
-        }
+        Arguments:
+            ref_data (Union[AnnData, str]): raw reference data. Can be an `AnnData` on which to train the model or a
+                `str` which represents the celltypist model name to load.
+            update_models (bool): if `True`, updates the celltypist model cache
+            force_update (bool): passed along directly to `celltypist.models.download_models`
+
+        Returns:
+            `celltypist.models.Model` to be used for annotation
+
+        Notes:
+            - When `ref_data` is a `str`, this function force-updates all celltypist models. This will result in a
+                substantial delay while the data is being downloaded
+            - TODO add another case of ref_data: loading a trained model from a file
+        """
 
         if isinstance(ref_data, str):
-            if kwargs['update_models']:
-                models.download_models(force_update=kwargs['force_update'])
+            if update_models:
+                models.download_models(force_update=force_update)
             return models.Model.load(model=ref_data)
 
         elif isinstance(ref_data, AnnData):

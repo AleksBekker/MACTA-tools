@@ -1,18 +1,17 @@
 """Implementation of abstract class for an interface to a CTA tool."""
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 import pandas as pd
-import pydantic
 
-from macta.utils import requirements as rqs
+from macta.utils.requirements import RequirementList
 
 
-class CTAToolInterface(pydantic.BaseModel, ABC):
+class CTAToolInterface(ABC):
     """Abstract class for tool interfaces"""
 
-    requirements: Optional[rqs.RequirementList] = None
+    _requirements: Optional[RequirementList] = None
 
     # region Abstract methods
 
@@ -29,7 +28,7 @@ class CTAToolInterface(pydantic.BaseModel, ABC):
         """
 
     @abstractmethod
-    def convert(self, results: Any, convert_to: str, **kwargs: Any) -> pd.Series:
+    def convert(self, results: Any, convert_to: str, **kwargs: Any) -> Union[pd.DataFrame, pd.Series]:
         """Converts results to standardized format
 
         Arguments:
@@ -102,12 +101,12 @@ class CTAToolInterface(pydantic.BaseModel, ABC):
         Returns:
             `True` if all of the `other_values` are compatible with this `RequirementList`'s requirements
         """
-        if self.requirements is None:
+        if self._requirements is None:
             return True
 
         if values is None:
             values = {}
 
-        return self.requirements.check(**values, **kwargs)
+        return self._requirements.check(**values, **kwargs)
 
     # endregion

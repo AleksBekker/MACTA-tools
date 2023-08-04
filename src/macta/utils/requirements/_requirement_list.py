@@ -1,9 +1,10 @@
-import pydantic
-from pydantic import field_validator
 from typing import Any, Dict, Optional
 
-from macta.utils.requirements._requirement import Requirement
+import pydantic
+from pydantic import field_validator
+
 from macta.utils.requirements._is_instance_requirement import IsInstanceRequirement
+from macta.utils.requirements._requirement import Requirement
 
 
 # TODO: make this inherit from `dict` and use its methods to store data

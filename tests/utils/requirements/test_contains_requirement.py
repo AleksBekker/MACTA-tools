@@ -1,6 +1,7 @@
-import pytest
 from itertools import permutations
 from typing import Any, Collection, List, Tuple
+
+import pytest
 
 from macta.utils.requirements import ContainsRequirement
 
