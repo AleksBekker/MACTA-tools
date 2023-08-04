@@ -52,7 +52,7 @@ testing = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["macta"]
+include = ["macta*"]
 namespaces = false
 
 [tool.setuptools.package-data]
