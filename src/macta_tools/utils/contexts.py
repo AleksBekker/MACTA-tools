@@ -1,11 +1,10 @@
 import logging
-import typing
 from contextlib import contextmanager
+from typing import Iterator
 
 
-@typing.no_type_check
 @contextmanager
-def suppress_logging() -> None:
+def suppress_logging() -> Iterator[None]:
     state = logging.getLogger().getEffectiveLevel()
     logging.disable(logging.CRITICAL)
     yield

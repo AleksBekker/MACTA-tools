@@ -17,7 +17,8 @@ class RequirementList(pydantic.BaseModel):
         super().__init__(requirements={**requirements, **kwargs})
 
     @field_validator('requirements')
-    def requirements_correct_dict(cls, requirements: Optional[Dict[str, Requirement]] = None, **kwargs: Any) -> Dict[str, Requirement]:
+    def requirements_correct_dict(cls, requirements: Optional[Dict[str, Requirement]] = None, **_: Any
+                                  ) -> Dict[str, Requirement]:
 
         # Input Validation
         if not isinstance(requirements, dict) or not IsInstanceRequirement(str).check(*requirements.keys()) \

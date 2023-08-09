@@ -4,7 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "macta_tools"
-version = "0.0.4"
 authors = [{ name = "Aleksandr Bekker", email = "alekso.bekker@gmail.com" }]
 description = "Annotation tools for the MACTA suite"
 keywords = ["cell type annotation", "single cell"]
@@ -23,6 +22,13 @@ dependencies = [
     "pydantic>=2.0.0",
     "scanpy>=1.9.3",
 ]
+dynamic = ["version"]
+
+[tool.setuptools.dynamic]
+version = { attr = "macta_tools.__version__" }
+
+[project.scripts]
+"macta-tools" = "macta_tools:cli_main"
 
 [project.urls]
 "Homepage" = "https://github.com/AleksBekker/MACTA_py"
