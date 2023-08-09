@@ -9,9 +9,8 @@ The goal of this code is to assemble multiple python-based cell type annotation 
 
 ```bash
 git clone https://github.com/AleksBekker/MACTA_py
-cd MACTA_py
-# conda create -n macta_py python=3.7
-pip install -e .
+pipenv install -d
+pipenv run pip install ".[EXTRAS_YOU_WILL_BE_USING]"
 ```
 
 ## Citations
@@ -59,7 +58,5 @@ pip install -e .
 Please refer to the repo's dependency tree (github.com/AleksBekker/MACTA_py/network/dependencies) 
 for information on all other packages used, including: 
 
-- Autopep8
 - Pandas
-
-
+- Pydantic

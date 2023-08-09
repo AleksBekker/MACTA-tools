@@ -10,8 +10,8 @@ from anndata import AnnData
 from celltypist import models
 from celltypist.classifier import AnnotationResult
 
-from macta.tools._cta_tool_interface import CTAToolInterface
-from macta.utils.requirements import EqualityRequirement, RequirementList
+from macta_tools.tools._cta_tool_interface import CTAToolInterface
+from macta_tools.utils.requirements import EqualityRequirement, RequirementList
 
 # Disable `celltypist`'s trivial output logs
 logging.getLogger(celltypist.__name__).setLevel(logging.ERROR)
@@ -25,7 +25,7 @@ class CelltypistInterface(CTAToolInterface):
         annot_type=EqualityRequirement('ref'),
     )
 
-    def annotate(self, expr_data: AnnData, ref_data: models.Model, **kwargs: Any) -> AnnotationResult:
+    def annotate(self, expr_data: AnnData, ref_data: models.Model, **_: Any) -> AnnotationResult:
         """Runs annotation using `celltypist`.
 
         Arguments:
@@ -37,7 +37,7 @@ class CelltypistInterface(CTAToolInterface):
         """
         return celltypist.annotate(expr_data, model=ref_data, majority_voting=True)
 
-    def convert(self, results: AnnotationResult, convert_to: str, **kwargs: Any) -> Union[pd.DataFrame, pd.Series]:
+    def convert(self, results: AnnotationResult, convert_to: str, **_: Any) -> Union[pd.DataFrame, pd.Series]:
         """Converts `celltypist` results to standardized format.
 
         Arguments:

@@ -6,11 +6,11 @@ from typing import Any, Container, Dict, Optional, Union
 import pandas as pd
 from anndata import AnnData
 
-from macta.tools import AVAILABLE, CTAToolInterface
+from macta_tools.tools import AVAILABLE, CTAToolInterface
 
 
 def annotate(expr_data: AnnData, ref_data: Union[AnnData, pd.DataFrame], annot_type: str, result_type: str = 'labels',
-             annot_tools: Union[str, Container[str]] = '*',
+             annot_tools: Optional[Container[str]] = None,
              tool_interfaces: Optional[Dict[str, CTAToolInterface]] = None, **kwargs: Any
              ) -> Dict[str, Union[pd.Series, pd.DataFrame]]:
     """Runs MACTA annotation analysis.
@@ -30,7 +30,7 @@ def annotate(expr_data: AnnData, ref_data: Union[AnnData, pd.DataFrame], annot_t
     if tool_interfaces is None:
         tool_interfaces = AVAILABLE
 
-    if annot_tools == '*':
+    if not annot_tools:
         annot_tools = list(tool_interfaces.keys())
 
     results = {}
@@ -46,8 +46,8 @@ def annotate(expr_data: AnnData, ref_data: Union[AnnData, pd.DataFrame], annot_t
     return results
 
 
-def run_tool(tool_name: str, interface: CTAToolInterface, expr_data: AnnData, ref_data: AnnData, annot_type: str,
-             result_type: str, **kwargs: Any) -> Optional[pd.Series]:
+def run_tool(tool_name: str, interface: CTAToolInterface, expr_data: AnnData, ref_data: Union[AnnData, pd.DataFrame],
+             annot_type: str, result_type: str, **kwargs: Any) -> Union[pd.DataFrame, pd.Series, None]:
     """Fully runs the annotation for one tool and handles typical issues and exceptions.
 
     Arguments:

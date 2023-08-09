@@ -2,7 +2,7 @@ import pytest
 
 # Skip this file if this module cannot be used with the current MACTA installation
 try:
-    from macta.tools import ScanviInterface
+    from macta_tools.tools import ScanviInterface
 except ImportError:
     pytest.skip(allow_module_level=True, reason='SCANVI-compatible extra not installed.')
 

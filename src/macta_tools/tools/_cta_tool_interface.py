@@ -1,16 +1,17 @@
 """Implementation of abstract class for an interface to a CTA tool."""
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional, Union
+from typing import Any, Collection, Dict, Optional, Union
 
 import pandas as pd
 
-from macta.utils.requirements import RequirementList
+from macta_tools.utils.requirements import RequirementList
 
 
 class CTAToolInterface(ABC):
     """Abstract class for tool interfaces"""
 
+    _required_kwargs: Collection[str] = []
     _requirements: Optional[RequirementList] = None
 
     # region Abstract methods
@@ -43,7 +44,7 @@ class CTAToolInterface(ABC):
 
     # region Pre-processing methods
 
-    def preprocess_expr(self, expr_data: Any, **kwargs: Any) -> Any:
+    def preprocess_expr(self, expr_data: Any, **_: Any) -> Any:
         """Pre-process expr_data for use in a specific algorithm.
 
         Arguments:
@@ -54,7 +55,7 @@ class CTAToolInterface(ABC):
         """
         return expr_data
 
-    def preprocess_ref(self, ref_data: Any, **kwargs: Any) -> Any:
+    def preprocess_ref(self, ref_data: Any, **_: Any) -> Any:
         """Pre-process expr_data for use in a specific algorithm.
 
         Arguments:
@@ -69,7 +70,7 @@ class CTAToolInterface(ABC):
 
     # region Other class methods for annotation
 
-    def run_full(self, expr_data: Any, ref_data: Any, convert_to: str, **kwargs: Any) -> pd.Series:
+    def run_full(self, expr_data: Any, ref_data: Any, convert_to: str, **kwargs: Any) -> Union[pd.DataFrame, pd.Series]:
         """Run `self.annotate`, followed by `self.convert` on a data set.
 
         Arguments:
@@ -106,6 +107,10 @@ class CTAToolInterface(ABC):
 
         if values is None:
             values = {}
+
+        for kwarg in self._required_kwargs:
+            if kwarg not in kwargs:
+                return False
 
         return self._requirements.check(**values, **kwargs)
 

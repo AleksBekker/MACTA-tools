@@ -5,13 +5,15 @@ import numpy as np
 import pandas as pd
 from scanpy import AnnData
 
-from macta.tools._cta_tool_interface import CTAToolInterface
-from macta.utils.contexts import suppress_logging
-from macta.utils.requirements import EqualityRequirement, NotNoneRequirement, RequirementList
+from macta_tools.tools._cta_tool_interface import CTAToolInterface
+from macta_tools.utils.contexts import suppress_logging
+from macta_tools.utils.requirements import EqualityRequirement, RequirementList
 
 # Suppress the output that comes with importing scArches
 with suppress_logging():
-    from scarches import SCANVI, SCVI
+    # Ignored because a ImportError is expected for this module
+    # TODO create module/file documnentation specifying that a ModuleNotFoundError is expected
+    from scarches import SCANVI, SCVI  # type: ignore
 
 
 class ScanviInterface(CTAToolInterface):
@@ -19,9 +21,9 @@ class ScanviInterface(CTAToolInterface):
 
     _requirements = RequirementList(
         annot_type=EqualityRequirement('ref'),
-        batch_col=NotNoneRequirement(),
-        cell_type_col=NotNoneRequirement(),
     )
+
+    _required_kwargs = ['batch_col', 'cell_type_col']
 
     def annotate(self, expr_data: AnnData, ref_data: SCANVI, **kwargs: Any) -> SCANVI:
         """Runs annotation using `SCANVI`.
@@ -47,7 +49,7 @@ class ScanviInterface(CTAToolInterface):
 
         return model
 
-    def convert(self, results: SCANVI, convert_to: str, **kwargs: Any) -> Union[pd.DataFrame, pd.Series]:
+    def convert(self, results: SCANVI, convert_to: str, **_: Any) -> Union[pd.DataFrame, pd.Series]:
         """Converts a `SCANVI` model to the standard data types.
 
         Arguments:
@@ -67,7 +69,7 @@ class ScanviInterface(CTAToolInterface):
         raise ValueError(f'{convert_to} is an invalid option for `convert_to`')
 
     def preprocess_ref(self, ref_data: AnnData, cell_type_col: str = '', batch_col: str = '', ref_type: str = 'counts',
-                       **kwargs: Any) -> SCANVI:
+                       **_: Any) -> SCANVI:
         """Preprocesses the reference data into a `SCANVI` model.
 
         Arguments:
@@ -101,6 +103,7 @@ class ScanviInterface(CTAToolInterface):
         reference_latent['scanvi_batch'] = ref_data.obs[batch_col].tolist()
 
         reference_latent['scanvi_predictions'] = scanvae.predict()
-        logging.info(f'ScanVI: accuracy = {np.mean(reference_latent.obs.scanvi_predictions == reference_latent.obs.cell_type):.4%}')
+        accuracy = np.mean(reference_latent.obs.scanvi_predictions == reference_latent.obs.cell_type)
+        logging.info(f'ScanVI: {accuracy = :.4%}')
 
         return scanvae

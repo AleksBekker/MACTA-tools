@@ -3,8 +3,8 @@ from typing import Any, Dict, Optional
 import pydantic
 from pydantic import field_validator
 
-from macta.utils.requirements._is_instance_requirement import IsInstanceRequirement
-from macta.utils.requirements._requirement import Requirement
+from macta_tools.utils.requirements._is_instance_requirement import IsInstanceRequirement
+from macta_tools.utils.requirements._requirement import Requirement
 
 
 # TODO: make this inherit from `dict` and use its methods to store data
@@ -17,7 +17,8 @@ class RequirementList(pydantic.BaseModel):
         super().__init__(requirements={**requirements, **kwargs})
 
     @field_validator('requirements')
-    def requirements_correct_dict(cls, requirements: Optional[Dict[str, Requirement]] = None, **kwargs: Any) -> Dict[str, Requirement]:
+    def requirements_correct_dict(cls, requirements: Optional[Dict[str, Requirement]] = None, **_: Any
+                                  ) -> Dict[str, Requirement]:
 
         # Input Validation
         if not isinstance(requirements, dict) or not IsInstanceRequirement(str).check(*requirements.keys()) \
