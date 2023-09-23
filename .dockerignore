@@ -1,0 +1,18 @@
+# TODO can I add LICENSE and README.md here?
+**/*.egg-info
+**/__pycache__
+.git*
+.coverage
+.dockerignore
+.flake8
+.mypy_cache
+.pytest_cache
+.tox
+build
+data
+Pipfile
+Pipfile.lock
+pyrightconfig.json
+tests
+tox.ini
+

@@ -11,6 +11,7 @@ from macta_tools.utils.requirements import RequirementList
 class CTAToolInterface(ABC):
     """Abstract class for tool interfaces"""
 
+    _name: str = 'unnamed_tool'
     _required_kwargs: Collection[str] = []
     _requirements: Optional[RequirementList] = None
 

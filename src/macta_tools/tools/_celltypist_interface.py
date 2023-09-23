@@ -17,10 +17,10 @@ from macta_tools.utils.requirements import EqualityRequirement, RequirementList
 logging.getLogger(celltypist.__name__).setLevel(logging.ERROR)
 
 
-@dataclass
 class CelltypistInterface(CTAToolInterface):
     """Class for interfacing with the `celltypist` tool"""
 
+    _name = 'celltypist'
     _requirements = RequirementList(
         annot_type=EqualityRequirement('ref'),
     )

@@ -14,12 +14,16 @@ __all__ = ['AVAILABLE', 'CTAToolInterface']
 if not sys.warnoptions:
     warnings.simplefilter('ignore', NumbaDeprecationWarning)
 
-with suppress(ImportError):
+# TODO figure out how to turn each `with` into a function
+
+with suppress(ModuleNotFoundError):
     from macta_tools.tools._celltypist_interface import CelltypistInterface
     __all__.append('CelltypistInterface')
-    AVAILABLE['celltypist'] = CelltypistInterface()
+    celltypist = CelltypistInterface()
+    AVAILABLE[celltypist._name] = celltypist
 
-with suppress(ImportError):
+with suppress(ModuleNotFoundError):
     from macta_tools.tools._scanvi import ScanviInterface
     __all__.append('ScanviInterface')
-    AVAILABLE['scanvi'] = ScanviInterface()
+    scanvi = ScanviInterface()
+    AVAILABLE[scanvi._name] = scanvi

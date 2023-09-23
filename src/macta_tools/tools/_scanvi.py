@@ -13,12 +13,13 @@ from macta_tools.utils.requirements import EqualityRequirement, RequirementList
 with suppress_logging():
     # Ignored because a ImportError is expected for this module
     # TODO create module/file documnentation specifying that a ModuleNotFoundError is expected
-    from scarches import SCANVI, SCVI  # type: ignore
+    from scarches.models import SCANVI, SCVI  # type: ignore
 
 
 class ScanviInterface(CTAToolInterface):
     """Interface for running ScanVI analysis."""
 
+    _name = 'scanvi'
     _requirements = RequirementList(
         annot_type=EqualityRequirement('ref'),
     )

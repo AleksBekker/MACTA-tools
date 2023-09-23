@@ -37,4 +37,4 @@ class RequirementList(pydantic.BaseModel):
             `True` if all of the `other_values` are compatible with this `RequirementList`'s requirements
         """
 
-        return all(self.requirements[k].check(v) for k, v in kwargs.items())
+        return all(self.requirements[k].check(v) for k, v in kwargs.items() if k in self.requirements)
